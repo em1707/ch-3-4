@@ -1,0 +1,3258 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Introduction to IT</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link
+      href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap"
+      rel="stylesheet"
+    />
+    <style>
+      /* Use Inter font */
+      body {
+        font-family: "Inter", sans-serif;
+      }
+
+      .option-button-label {
+        transition: all 0.2s ease-in-out;
+      }
+
+      /* --- SELECTION STYLES (before submit) --- */
+      /* Handle hover */
+      form:not([data-submitted="true"]) .option-button-label:hover {
+        background-color: #f9fafb; /* gray-50 */
+      }
+
+      /* Style for a selected option */
+      .selected-option-label {
+        border-color: #2563eb; /* blue-600 */
+        background-color: #eff6ff; /* blue-50 */
+      }
+      .selected-option-label .custom-radio {
+        border-color: #2563eb; /* blue-600 */
+      }
+      .selected-option-label .custom-radio > span {
+        opacity: 1;
+      }
+      .selected-option-label > span:last-of-type {
+        /* The text */
+        color: #1e40af; /* blue-900 */
+        font-weight: 500;
+      }
+
+      /* --- QUIZ PAGE - FEEDBACK STYLES (after submit) --- */
+
+      /* Style for a correct answer */
+      .correct-answer-style {
+        background-color: #d1fae5; /* green-100 */
+        border-color: #10b981; /* green-500 */
+      }
+      .correct-answer-style .custom-radio {
+        border-color: #10b981; /* green-500 */
+        background-color: #10b981; /* green-500 */
+      }
+      .correct-answer-style .custom-radio > span {
+        /* White checkmark */
+        width: 0.75rem; /* w-3 */
+        height: 0.75rem; /* h-3 */
+        background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 20 20' fill='white'%3E%3Cpath fill-rule='evenodd' d='M16.704 4.153a.75.75 0 01.143 1.052l-8 10.5a.75.75 0 01-1.127.075l-4.5-4.5a.75.75 0 011.06-1.06l3.894 3.893 7.48-9.817a.75.75 0 011.05-.143z' clip-rule='evenodd' /%3E%3C/svg%3E");
+        background-size: contain;
+        background-repeat: no-repeat;
+        background-color: transparent;
+        opacity: 1;
+      }
+      .correct-answer-style > span:last-of-type {
+        color: #065f46; /* green-900 */
+        font-weight: 500;
+      }
+
+      /* Style for an incorrect answer */
+      .incorrect-answer-style {
+        background-color: #fee2e2; /* red-100 */
+        border-color: #ef4444; /* red-500 */
+      }
+      .incorrect-answer-style .custom-radio {
+        border-color: #ef4444; /* red-500 */
+        background-color: #ef4444; /* red-500 */
+      }
+      .incorrect-answer-style .custom-radio > span {
+        /* White X */
+        width: 0.75rem; /* w-3 */
+        height: 0.75rem; /* h-3 */
+        background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 20 20' fill='white'%3E%3Cpath d='M6.28 5.22a.75.75 0 00-1.06 1.06L8.94 10l-3.72 3.72a.75.75 0 101.06 1.06L10 11.06l3.72 3.72a.75.75 0 101.06-1.06L11.06 10l3.72-3.72a.75.75 0 00-1.06-1.06L10 8.94 6.28 5.22z' /%3E%3C/svg%3E");
+        background-size: contain;
+        background-repeat: no-repeat;
+        background-color: transparent;
+        opacity: 1;
+      }
+      .incorrect-answer-style > span:last-of-type {
+        color: #991b1b; /* red-900 */
+        font-weight: 500;
+      }
+
+      /* --- RESULTS PAGE - STYLES --- */
+      .results-question-incorrect {
+        background-color: #fee2e2; /* red-100 */
+        border-left-color: #ef4444; /* red-500 */
+      }
+      .results-question-correct {
+        background-color: #f0fdf4; /* green-50 */
+        border-left-color: #22c55e; /* green-500 */
+      }
+      .results-answer-review {
+        background-color: #fefce8; /* yellow-50 */
+      }
+    </style>
+  </head>
+  <body class="bg-blue-50 min-h-screen antialiased">
+    <nav class="bg-white shadow-md w-full sticky top-0 z-40">
+      <div
+        class="container mx-auto max-w-4xl px-4 sm:px-8 py-3 flex items-center justify-between"
+      >
+        <div class="flex items-center space-x-3">
+          <svg
+            class="w-10 h-10 text-blue-600"
+            xmlns="http://www.w3.org/2000/svg"
+            fill="none"
+            viewBox="0 0 24 24"
+            stroke-width="1.5"
+            stroke="currentColor"
+          >
+            <path
+              stroke-linecap="round"
+              stroke-linejoin="round"
+              d="M9 17.25v1.007a3 3 0 0 1-.879 2.122L7.5 21h9l-1.621-.621A3 3 0 0 1 15 18.257V17.25m6-12V15a2.25 2.25 0 0 1-2.25 2.25H5.25A2.25 2.25 0 0 1 3 15V5.25A2.25 2.25 0 0 1 5.25 3h13.5A2.25 2.25 0 0 1 21 5.25Z"
+            />
+          </svg>
+          <h1 class="text-2xl font-bold text-blue-700">Introduction to IT</h1>
+        </div>
+        <p class="text-lg text-gray-600 hidden sm:block">
+          If your score is under 35, you have the same IQ as a monkey :).
+        </p>
+      </div>
+    </nav>
+
+    <div class="container mx-auto max-w-3xl p-4 sm:p-8 mt-8">
+      <form
+        id="quizForm"
+        class="bg-white p-6 sm:p-8 rounded-2xl shadow-lg space-y-12"
+      >
+        <section id="chapter3" class="space-y-6">
+          <div class="border-b-2 border-blue-200 pb-4">
+            <h2 class="text-3xl font-semibold text-blue-600 mb-4">
+              Chapter: 3
+            </h2>
+            <div class="bg-blue-50 p-4 rounded-lg border-l-4 border-blue-500">
+              <h3 class="font-bold text-lg text-blue-800 mb-2">
+                Chapter Summary
+              </h3>
+              <p class="text-gray-700 leading-relaxed">
+                The <strong>system unit</strong> is the case containing the
+                electronic components that process data. Inside, the
+                <strong>motherboard</strong> (the main circuit board) holds the
+                <strong>processor (CPU)</strong>, <strong>memory</strong>, and
+                adapter cards. The CPU, which interprets and carries out
+                instructions, consists of two main parts: the
+                <strong>Control Unit</strong> (which directs operations) and the
+                <strong>Arithmetic Logic Unit (ALU)</strong> (which performs
+                calculations and comparisons). The processor's speed is managed
+                by a <strong>system clock</strong> and measured in gigahertz
+                (GHz). Computers represent data using the
+                <strong>binary system</strong> (digits 0 and 1). A single digit
+                is a <strong>bit</strong>, and a group of 8 bits, which can
+                represent a single character, is called a <strong>byte</strong>.
+              </p>
+            </div>
+          </div>
+
+          <h3 class="text-2xl font-semibold text-gray-800">
+            Chapter 3 Quiz: MCQ
+          </h3>
+
+          <div
+            class="space-y-3"
+            id="q-c3_mcq_1"
+            data-question-text="1. What is the main circuit board of the system unit?"
+          >
+            <p class="text-lg font-medium text-gray-900">
+              1. What is the main circuit board of the system unit?
+            </p>
+            <div class="space-y-2" data-group="c3_mcq_1">
+              <label
+                class="option-button-label flex items-center w-full p-3 rounded-lg border-2 border-gray-300 text-left bg-white text-gray-700 hover:bg-gray-100 cursor-pointer"
+              >
+                <input
+                  type="radio"
+                  name="c3_mcq_1"
+                  value="A"
+                  class="sr-only"
+                  data-option-text="A) ALU"
+                />
+                <span
+                  class="custom-radio w-5 h-5 border-2 border-gray-400 rounded-full mr-3 grid place-items-center flex-shrink-0"
+                >
+                  <span
+                    class="w-2.5 h-2.5 rounded-full bg-blue-600 opacity-0 transition-opacity"
+                  ></span>
+                </span>
+                <span>A) ALU</span>
+              </label>
+              <label
+                class="option-button-label flex items-center w-full p-3 rounded-lg border-2 border-gray-300 text-left bg-white text-gray-700 hover:bg-gray-100 cursor-pointer"
+              >
+                <input
+                  type="radio"
+                  name="c3_mcq_1"
+                  value="B"
+                  class="sr-only"
+                  data-option-text="B) Motherboard"
+                />
+                <span
+                  class="custom-radio w-5 h-5 border-2 border-gray-400 rounded-full mr-3 grid place-items-center flex-shrink-0"
+                >
+                  <span
+                    class="w-2.5 h-2.5 rounded-full bg-blue-600 opacity-0 transition-opacity"
+                  ></span>
+                </span>
+                <span>B) Motherboard</span>
+              </label>
+              <label
+                class="option-button-label flex items-center w-full p-3 rounded-lg border-2 border-gray-300 text-left bg-white text-gray-700 hover:bg-gray-100 cursor-pointer"
+              >
+                <input
+                  type="radio"
+                  name="c3_mcq_1"
+                  value="C"
+                  class="sr-only"
+                  data-option-text="C) Power Supply"
+                />
+                <span
+                  class="custom-radio w-5 h-5 border-2 border-gray-400 rounded-full mr-3 grid place-items-center flex-shrink-0"
+                >
+                  <span
+                    class="w-2.5 h-2.5 rounded-full bg-blue-600 opacity-0 transition-opacity"
+                  ></span>
+                </span>
+                <span>C) Power Supply</span>
+              </label>
+              <label
+                class="option-button-label flex items-center w-full p-3 rounded-lg border-2 border-gray-300 text-left bg-white text-gray-700 hover:bg-gray-100 cursor-pointer"
+              >
+                <input
+                  type="radio"
+                  name="c3_mcq_1"
+                  value="D"
+                  class="sr-only"
+                  data-option-text="D) CPU"
+                />
+                <span
+                  class="custom-radio w-5 h-5 border-2 border-gray-400 rounded-full mr-3 grid place-items-center flex-shrink-0"
+                >
+                  <span
+                    class="w-2.5 h-2.5 rounded-full bg-blue-600 opacity-0 transition-opacity"
+                  ></span>
+                </span>
+                <span>D) CPU</span>
+              </label>
+            </div>
+          </div>
+
+          <div
+            class="space-y-3"
+            id="q-c3_mcq_2"
+            data-question-text="2. Which component of the processor directs and coordinates most operations?"
+          >
+            <p class="text-lg font-medium text-gray-900">
+              2. Which component of the processor directs and coordinates most
+              operations?
+            </p>
+            <div class="space-y-2" data-group="c3_mcq_2">
+              <label
+                class="option-button-label flex items-center w-full p-3 rounded-lg border-2 border-gray-300 text-left bg-white text-gray-700 hover:bg-gray-100 cursor-pointer"
+              >
+                <input
+                  type="radio"
+                  name="c3_mcq_2"
+                  value="A"
+                  class="sr-only"
+                  data-option-text="A) ALU"
+                />
+                <span
+                  class="custom-radio w-5 h-5 border-2 border-gray-400 rounded-full mr-3 grid place-items-center flex-shrink-0"
+                >
+                  <span
+                    class="w-2.5 h-2.5 rounded-full bg-blue-600 opacity-0 transition-opacity"
+                  ></span>
+                </span>
+                <span>A) ALU</span>
+              </label>
+              <label
+                class="option-button-label flex items-center w-full p-3 rounded-lg border-2 border-gray-300 text-left bg-white text-gray-700 hover:bg-gray-100 cursor-pointer"
+              >
+                <input
+                  type="radio"
+                  name="c3_mcq_2"
+                  value="B"
+                  class="sr-only"
+                  data-option-text="B) Register"
+                />
+                <span
+                  class="custom-radio w-5 h-5 border-2 border-gray-400 rounded-full mr-3 grid place-items-center flex-shrink-0"
+                >
+                  <span
+                    class="w-2.5 h-2.5 rounded-full bg-blue-600 opacity-0 transition-opacity"
+                  ></span>
+                </span>
+                <span>B) Register</span>
+              </label>
+              <label
+                class="option-button-label flex items-center w-full p-3 rounded-lg border-2 border-gray-300 text-left bg-white text-gray-700 hover:bg-gray-100 cursor-pointer"
+              >
+                <input
+                  type="radio"
+                  name="c3_mcq_2"
+                  value="C"
+                  class="sr-only"
+                  data-option-text="C) Control Unit"
+                />
+                <span
+                  class="custom-radio w-5 h-5 border-2 border-gray-400 rounded-full mr-3 grid place-items-center flex-shrink-0"
+                >
+                  <span
+                    class="w-2.5 h-2.5 rounded-full bg-blue-600 opacity-0 transition-opacity"
+                  ></span>
+                </span>
+                <span>C) Control Unit</span>
+              </label>
+              <label
+                class="option-button-label flex items-center w-full p-3 rounded-lg border-2 border-gray-300 text-left bg-white text-gray-700 hover:bg-gray-100 cursor-pointer"
+              >
+                <input
+                  type="radio"
+                  name="c3_mcq_2"
+                  value="D"
+                  class="sr-only"
+                  data-option-text="D) System Clock"
+                />
+                <span
+                  class="custom-radio w-5 h-5 border-2 border-gray-400 rounded-full mr-3 grid place-items-center flex-shrink-0"
+                >
+                  <span
+                    class="w-2.5 h-2.5 rounded-full bg-blue-600 opacity-0 transition-opacity"
+                  ></span>
+                </span>
+                <span>D) System Clock</span>
+              </label>
+            </div>
+          </div>
+
+          <div
+            class="space-y-3"
+            id="q-c3_mcq_3"
+            data-question-text="3. Which component performs arithmetic, comparison, and other operations?"
+          >
+            <p class="text-lg font-medium text-gray-900">
+              3. Which component performs arithmetic, comparison, and other
+              operations?
+            </p>
+            <div class="space-y-2" data-group="c3_mcq_3">
+              <label
+                class="option-button-label flex items-center w-full p-3 rounded-lg border-2 border-gray-300 text-left bg-white text-gray-700 hover:bg-gray-100 cursor-pointer"
+              >
+                <input
+                  type="radio"
+                  name="c3_mcq_3"
+                  value="A"
+                  class="sr-only"
+                  data-option-text="A) ALU"
+                />
+                <span
+                  class="custom-radio w-5 h-5 border-2 border-gray-400 rounded-full mr-3 grid place-items-center flex-shrink-0"
+                >
+                  <span
+                    class="w-2.5 h-2.5 rounded-full bg-blue-600 opacity-0 transition-opacity"
+                  ></span>
+                </span>
+                <span>A) ALU</span>
+              </label>
+              <label
+                class="option-button-label flex items-center w-full p-3 rounded-lg border-2 border-gray-300 text-left bg-white text-gray-700 hover:bg-gray-100 cursor-pointer"
+              >
+                <input
+                  type="radio"
+                  name="c3_mcq_3"
+                  value="B"
+                  class="sr-only"
+                  data-option-text="B) Control Unit"
+                />
+                <span
+                  class="custom-radio w-5 h-5 border-2 border-gray-400 rounded-full mr-3 grid place-items-center flex-shrink-0"
+                >
+                  <span
+                    class="w-2.5 h-2.5 rounded-full bg-blue-600 opacity-0 transition-opacity"
+                  ></span>
+                </span>
+                <span>B) Control Unit</span>
+              </label>
+              <label
+                class="option-button-label flex items-center w-full p-3 rounded-lg border-2 border-gray-300 text-left bg-white text-gray-700 hover:bg-gray-100 cursor-pointer"
+              >
+                <input
+                  type="radio"
+                  name="c3_mcq_3"
+                  value="C"
+                  class="sr-only"
+                  data-option-text="C) Register"
+                />
+                <span
+                  class="custom-radio w-5 h-5 border-2 border-gray-400 rounded-full mr-3 grid place-items-center flex-shrink-0"
+                >
+                  <span
+                    class="w-2.5 h-2.5 rounded-full bg-blue-600 opacity-0 transition-opacity"
+                  ></span>
+                </span>
+                <span>C) Register</span>
+              </label>
+              <label
+                class="option-button-label flex items-center w-full p-3 rounded-lg border-2 border-gray-300 text-left bg-white text-gray-700 hover:bg-gray-100 cursor-pointer"
+              >
+                <input
+                  type="radio"
+                  name="c3_mcq_3"
+                  value="D"
+                  class="sr-only"
+                  data-option-text="D) Motherboard"
+                />
+                <span
+                  class="custom-radio w-5 h-5 border-2 border-gray-400 rounded-full mr-3 grid place-items-center flex-shrink-0"
+                >
+                  <span
+                    class="w-2.5 h-2.5 rounded-full bg-blue-600 opacity-0 transition-opacity"
+                  ></span>
+                </span>
+                <span>D) Motherboard</span>
+              </label>
+            </div>
+          </div>
+
+          <div
+            class="space-y-3"
+            id="q-c3_mcq_4"
+            data-question-text="4. What is the pace of the system clock measured in?"
+          >
+            <p class="text-lg font-medium text-gray-900">
+              4. What is the pace of the system clock measured in?
+            </p>
+            <div class="space-y-2" data-group="c3_mcq_4">
+              <label
+                class="option-button-label flex items-center w-full p-3 rounded-lg border-2 border-gray-300 text-left bg-white text-gray-700 hover:bg-gray-100 cursor-pointer"
+              >
+                <input
+                  type="radio"
+                  name="c3_mcq_4"
+                  value="A"
+                  class="sr-only"
+                  data-option-text="A) Bytes"
+                />
+                <span
+                  class="custom-radio w-5 h-5 border-2 border-gray-400 rounded-full mr-3 grid place-items-center flex-shrink-0"
+                >
+                  <span
+                    class="w-2.5 h-2.5 rounded-full bg-blue-600 opacity-0 transition-opacity"
+                  ></span>
+                </span>
+                <span>A) Bytes</span>
+              </label>
+              <label
+                class="option-button-label flex items-center w-full p-3 rounded-lg border-2 border-gray-300 text-left bg-white text-gray-700 hover:bg-gray-100 cursor-pointer"
+              >
+                <input
+                  type="radio"
+                  name="c3_mcq_4"
+                  value="B"
+                  class="sr-only"
+                  data-option-text="B) Bits"
+                />
+                <span
+                  class="custom-radio w-5 h-5 border-2 border-gray-400 rounded-full mr-3 grid place-items-center flex-shrink-0"
+                >
+                  <span
+                    class="w-2.5 h-2.5 rounded-full bg-blue-600 opacity-0 transition-opacity"
+                  ></span>
+                </span>
+                <span>B) Bits</span>
+              </label>
+              <label
+                class="option-button-label flex items-center w-full p-3 rounded-lg border-2 border-gray-300 text-left bg-white text-gray-700 hover:bg-gray-100 cursor-pointer"
+              >
+                <input
+                  type="radio"
+                  name="c3_mcq_4"
+                  value="C"
+                  class="sr-only"
+                  data-option-text="C) Gigahertz (GHz)"
+                />
+                <span
+                  class="custom-radio w-5 h-5 border-2 border-gray-400 rounded-full mr-3 grid place-items-center flex-shrink-0"
+                >
+                  <span
+                    class="w-2.5 h-2.5 rounded-full bg-blue-600 opacity-0 transition-opacity"
+                  ></span>
+                </span>
+                <span>C) Gigahertz (GHz)</span>
+              </label>
+              <label
+                class="option-button-label flex items-center w-full p-3 rounded-lg border-2 border-gray-300 text-left bg-white text-gray-700 hover:bg-gray-100 cursor-pointer"
+              >
+                <input
+                  type="radio"
+                  name="c3_mcq_4"
+                  value="D"
+                  class="sr-only"
+                  data-option-text="D) Volts"
+                />
+                <span
+                  class="custom-radio w-5 h-5 border-2 border-gray-400 rounded-full mr-3 grid place-items-center flex-shrink-0"
+                >
+                  <span
+                    class="w-2.5 h-2.5 rounded-full bg-blue-600 opacity-0 transition-opacity"
+                  ></span>
+                </span>
+                <span>D) Volts</span>
+              </label>
+            </div>
+          </div>
+
+          <div
+            class="space-y-3"
+            id="q-c3_mcq_5"
+            data-question-text="5. How many bits are in one byte?"
+          >
+            <p class="text-lg font-medium text-gray-900">
+              5. How many bits are in one byte?
+            </p>
+            <div class="space-y-2" data-group="c3_mcq_5">
+              <label
+                class="option-button-label flex items-center w-full p-3 rounded-lg border-2 border-gray-300 text-left bg-white text-gray-700 hover:bg-gray-100 cursor-pointer"
+              >
+                <input
+                  type="radio"
+                  name="c3_mcq_5"
+                  value="A"
+                  class="sr-only"
+                  data-option-text="A) 1"
+                />
+                <span
+                  class="custom-radio w-5 h-5 border-2 border-gray-400 rounded-full mr-3 grid place-items-center flex-shrink-0"
+                >
+                  <span
+                    class="w-2.5 h-2.5 rounded-full bg-blue-600 opacity-0 transition-opacity"
+                  ></span>
+                </span>
+                <span>A) 1</span>
+              </label>
+              <label
+                class="option-button-label flex items-center w-full p-3 rounded-lg border-2 border-gray-300 text-left bg-white text-gray-700 hover:bg-gray-100 cursor-pointer"
+              >
+                <input
+                  type="radio"
+                  name="c3_mcq_5"
+                  value="B"
+                  class="sr-only"
+                  data-option-text="B) 8"
+                />
+                <span
+                  class="custom-radio w-5 h-5 border-2 border-gray-400 rounded-full mr-3 grid place-items-center flex-shrink-0"
+                >
+                  <span
+                    class="w-2.5 h-2.5 rounded-full bg-blue-600 opacity-0 transition-opacity"
+                  ></span>
+                </span>
+                <span>B) 8</span>
+              </label>
+              <label
+                class="option-button-label flex items-center w-full p-3 rounded-lg border-2 border-gray-300 text-left bg-white text-gray-700 hover:bg-gray-100 cursor-pointer"
+              >
+                <input
+                  type="radio"
+                  name="c3_mcq_5"
+                  value="C"
+                  class="sr-only"
+                  data-option-text="C) 16"
+                />
+                <span
+                  class="custom-radio w-5 h-5 border-2 border-gray-400 rounded-full mr-3 grid place-items-center flex-shrink-0"
+                >
+                  <span
+                    class="w-2.5 h-2.5 rounded-full bg-blue-600 opacity-0 transition-opacity"
+                  ></span>
+                </span>
+                <span>C) 16</span>
+              </label>
+              <label
+                class="option-button-label flex items-center w-full p-3 rounded-lg border-2 border-gray-300 text-left bg-white text-gray-700 hover:bg-gray-100 cursor-pointer"
+              >
+                <input
+                  type="radio"
+                  name="c3_mcq_5"
+                  value="D"
+                  class="sr-only"
+                  data-option-text="D) 1024"
+                />
+                <span
+                  class="custom-radio w-5 h-5 border-2 border-gray-400 rounded-full mr-3 grid place-items-center flex-shrink-0"
+                >
+                  <span
+                    class="w-2.5 h-2.5 rounded-full bg-blue-600 opacity-0 transition-opacity"
+                  ></span>
+                </span>
+                <span>D) 1024</span>
+              </label>
+            </div>
+          </div>
+
+          <div
+            class="space-y-3"
+            id="q-c3_mcq_6"
+            data-question-text="6. What temporarily holds data and instructions within the processor?"
+          >
+            <p class="text-lg font-medium text-gray-900">
+              6. What temporarily holds data and instructions within the
+              processor?
+            </p>
+            <div class="space-y-2" data-group="c3_mcq_6">
+              <label
+                class="option-button-label flex items-center w-full p-3 rounded-lg border-2 border-gray-300 text-left bg-white text-gray-700 hover:bg-gray-100 cursor-pointer"
+              >
+                <input
+                  type="radio"
+                  name="c3_mcq_6"
+                  value="A"
+                  class="sr-only"
+                  data-option-text="A) ALU"
+                />
+                <span
+                  class="custom-radio w-5 h-5 border-2 border-gray-400 rounded-full mr-3 grid place-items-center flex-shrink-0"
+                >
+                  <span
+                    class="w-2.5 h-2.5 rounded-full bg-blue-600 opacity-0 transition-opacity"
+                  ></span>
+                </span>
+                <span>A) ALU</span>
+              </label>
+              <label
+                class="option-button-label flex items-center w-full p-3 rounded-lg border-2 border-gray-300 text-left bg-white text-gray-700 hover:bg-gray-100 cursor-pointer"
+              >
+                <input
+                  type="radio"
+                  name="c3_mcq_6"
+                  value="B"
+                  class="sr-only"
+                  data-option-text="B) Control Unit"
+                />
+                <span
+                  class="custom-radio w-5 h-5 border-2 border-gray-400 rounded-full mr-3 grid place-items-center flex-shrink-0"
+                >
+                  <span
+                    class="w-2.5 h-2.5 rounded-full bg-blue-600 opacity-0 transition-opacity"
+                  ></span>
+                </span>
+                <span>B) Control Unit</span>
+              </label>
+              <label
+                class="option-button-label flex items-center w-full p-3 rounded-lg border-2 border-gray-300 text-left bg-white text-gray-700 hover:bg-gray-100 cursor-pointer"
+              >
+                <input
+                  type="radio"
+                  name="c3_mcq_6"
+                  value="C"
+                  class="sr-only"
+                  data-option-text="C) Registers"
+                />
+                <span
+                  class="custom-radio w-5 h-5 border-2 border-gray-400 rounded-full mr-3 grid place-items-center flex-shrink-0"
+                >
+                  <span
+                    class="w-2.5 h-2.5 rounded-full bg-blue-600 opacity-0 transition-opacity"
+                  ></span>
+                </span>
+                <span>C) Registers</span>
+              </label>
+              <label
+                class="option-button-label flex items-center w-full p-3 rounded-lg border-2 border-gray-300 text-left bg-white text-gray-700 hover:bg-gray-100 cursor-pointer"
+              >
+                <input
+                  type="radio"
+                  name="c3_mcq_6"
+                  value="D"
+                  class="sr-only"
+                  data-option-text="D) Motherboard"
+                />
+                <span
+                  class="custom-radio w-5 h-5 border-2 border-gray-400 rounded-full mr-3 grid place-items-center flex-shrink-0"
+                >
+                  <span
+                    class="w-2.5 h-2.5 rounded-full bg-blue-600 opacity-0 transition-opacity"
+                  ></span>
+                </span>
+                <span>D) Motherboard</span>
+              </label>
+            </div>
+          </div>
+
+          <div
+            class="space-y-3"
+            id="q-c3_mcq_7"
+            data-question-text="7. What controls the timing of all computer operations?"
+          >
+            <p class="text-lg font-medium text-gray-900">
+              7. What controls the timing of all computer operations?
+            </p>
+            <div class="space-y-2" data-group="c3_mcq_7">
+              <label
+                class="option-button-label flex items-center w-full p-3 rounded-lg border-2 border-gray-300 text-left bg-white text-gray-700 hover:bg-gray-100 cursor-pointer"
+              >
+                <input
+                  type="radio"
+                  name="c3_mcq_7"
+                  value="A"
+                  class="sr-only"
+                  data-option-text="A) Power Supply"
+                />
+                <span
+                  class="custom-radio w-5 h-5 border-2 border-gray-400 rounded-full mr-3 grid place-items-center flex-shrink-0"
+                >
+                  <span
+                    class="w-2.5 h-2.5 rounded-full bg-blue-600 opacity-0 transition-opacity"
+                  ></span>
+                </span>
+                <span>A) Power Supply</span>
+              </label>
+              <label
+                class="option-button-label flex items-center w-full p-3 rounded-lg border-2 border-gray-300 text-left bg-white text-gray-700 hover:bg-gray-100 cursor-pointer"
+              >
+                <input
+                  type="radio"
+                  name="c3_mcq_7"
+                  value="B"
+                  class="sr-only"
+                  data-option-text="B) System Clock"
+                />
+                <span
+                  class="custom-radio w-5 h-5 border-2 border-gray-400 rounded-full mr-3 grid place-items-center flex-shrink-0"
+                >
+                  <span
+                    class="w-2.5 h-2.5 rounded-full bg-blue-600 opacity-0 transition-opacity"
+                  ></span>
+                </span>
+                <span>B) System Clock</span>
+              </label>
+              <label
+                class="option-button-label flex items-center w-full p-3 rounded-lg border-2 border-gray-300 text-left bg-white text-gray-700 hover:bg-gray-100 cursor-pointer"
+              >
+                <input
+                  type="radio"
+                  name="c3_mcq_7"
+                  value="C"
+                  class="sr-only"
+                  data-option-text="C) ALU"
+                />
+                <span
+                  class="custom-radio w-5 h-5 border-2 border-gray-400 rounded-full mr-3 grid place-items-center flex-shrink-0"
+                >
+                  <span
+                    class="w-2.5 h-2.5 rounded-full bg-blue-600 opacity-0 transition-opacity"
+                  ></span>
+                </span>
+                <span>C) ALU</span>
+              </label>
+              <label
+                class="option-button-label flex items-center w-full p-3 rounded-lg border-2 border-gray-300 text-left bg-white text-gray-700 hover:bg-gray-100 cursor-pointer"
+              >
+                <input
+                  type="radio"
+                  name="c3_mcq_7"
+                  value="D"
+                  class="sr-only"
+                  data-option-text="D) Operating System"
+                />
+                <span
+                  class="custom-radio w-5 h-5 border-2 border-gray-400 rounded-full mr-3 grid place-items-center flex-shrink-0"
+                >
+                  <span
+                    class="w-2.5 h-2.5 rounded-full bg-blue-600 opacity-0 transition-opacity"
+                  ></span>
+                </span>
+                <span>D) Operating System</span>
+              </label>
+            </div>
+          </div>
+
+          <div
+            class="space-y-3"
+            id="q-c3_mcq_8"
+            data-question-text="8. The binary system uses how many unique digits?"
+          >
+            <p class="text-lg font-medium text-gray-900">
+              8. The binary system uses how many unique digits?
+            </p>
+            <div class="space-y-2" data-group="c3_mcq_8">
+              <label
+                class="option-button-label flex items-center w-full p-3 rounded-lg border-2 border-gray-300 text-left bg-white text-gray-700 hover:bg-gray-100 cursor-pointer"
+              >
+                <input
+                  type="radio"
+                  name="c3_mcq_8"
+                  value="A"
+                  class="sr-only"
+                  data-option-text="A) 1"
+                />
+                <span
+                  class="custom-radio w-5 h-5 border-2 border-gray-400 rounded-full mr-3 grid place-items-center flex-shrink-0"
+                >
+                  <span
+                    class="w-2.5 h-2.5 rounded-full bg-blue-600 opacity-0 transition-opacity"
+                  ></span>
+                </span>
+                <span>A) 1</span>
+              </label>
+              <label
+                class="option-button-label flex items-center w-full p-3 rounded-lg border-2 border-gray-300 text-left bg-white text-gray-700 hover:bg-gray-100 cursor-pointer"
+              >
+                <input
+                  type="radio"
+                  name="c3_mcq_8"
+                  value="B"
+                  class="sr-only"
+                  data-option-text="B) 10"
+                />
+                <span
+                  class="custom-radio w-5 h-5 border-2 border-gray-400 rounded-full mr-3 grid place-items-center flex-shrink-0"
+                >
+                  <span
+                    class="w-2.5 h-2.5 rounded-full bg-blue-600 opacity-0 transition-opacity"
+                  ></span>
+                </span>
+                <span>B) 10</span>
+              </label>
+              <label
+                class="option-button-label flex items-center w-full p-3 rounded-lg border-2 border-gray-300 text-left bg-white text-gray-700 hover:bg-gray-100 cursor-pointer"
+              >
+                <input
+                  type="radio"
+                  name="c3_mcq_8"
+                  value="C"
+                  class="sr-only"
+                  data-option-text="C) 8"
+                />
+                <span
+                  class="custom-radio w-5 h-5 border-2 border-gray-400 rounded-full mr-3 grid place-items-center flex-shrink-0"
+                >
+                  <span
+                    class="w-2.5 h-2.5 rounded-full bg-blue-600 opacity-0 transition-opacity"
+                  ></span>
+                </span>
+                <span>C) 8</span>
+              </label>
+              <label
+                class="option-button-label flex items-center w-full p-3 rounded-lg border-2 border-gray-300 text-left bg-white text-gray-700 hover:bg-gray-100 cursor-pointer"
+              >
+                <input
+                  type="radio"
+                  name="c3_mcq_8"
+                  value="D"
+                  class="sr-only"
+                  data-option-text="D) 2"
+                />
+                <span
+                  class="custom-radio w-5 h-5 border-2 border-gray-400 rounded-full mr-3 grid place-items-center flex-shrink-0"
+                >
+                  <span
+                    class="w-2.5 h-2.5 rounded-full bg-blue-600 opacity-0 transition-opacity"
+                  ></span>
+                </span>
+                <span>D) 2</span>
+              </label>
+            </div>
+          </div>
+
+          <div
+            class="space-y-3"
+            id="q-c3_mcq_9"
+            data-question-text="9. Which of the following is NOT listed as a component inside the system unit?"
+          >
+            <p class="text-lg font-medium text-gray-900">
+              9. Which of the following is NOT listed as a component inside the
+              system unit?
+            </p>
+            <div class="space-y-2" data-group="c3_mcq_9">
+              <label
+                class="option-button-label flex items-center w-full p-3 rounded-lg border-2 border-gray-300 text-left bg-white text-gray-700 hover:bg-gray-100 cursor-pointer"
+              >
+                <input
+                  type="radio"
+                  name="c3_mcq_9"
+                  value="A"
+                  class="sr-only"
+                  data-option-text="A) Processor"
+                />
+                <span
+                  class="custom-radio w-5 h-5 border-2 border-gray-400 rounded-full mr-3 grid place-items-center flex-shrink-0"
+                >
+                  <span
+                    class="w-2.5 h-2.5 rounded-full bg-blue-600 opacity-0 transition-opacity"
+                  ></span>
+                </span>
+                <span>A) Processor</span>
+              </label>
+              <label
+                class="option-button-label flex items-center w-full p-3 rounded-lg border-2 border-gray-300 text-left bg-white text-gray-700 hover:bg-gray-100 cursor-pointer"
+              >
+                <input
+                  type="radio"
+                  name="c3_mcq_9"
+                  value="B"
+                  class="sr-only"
+                  data-option-text="B) Mouse"
+                />
+                <span
+                  class="custom-radio w-5 h-5 border-2 border-gray-400 rounded-full mr-3 grid place-items-center flex-shrink-0"
+                >
+                  <span
+                    class="w-2.5 h-2.5 rounded-full bg-blue-600 opacity-0 transition-opacity"
+                  ></span>
+                </span>
+                <span>B) Mouse</span>
+              </label>
+              <label
+                class="option-button-label flex items-center w-full p-3 rounded-lg border-2 border-gray-300 text-left bg-white text-gray-700 hover:bg-gray-100 cursor-pointer"
+              >
+                <input
+                  type="radio"
+                  name="c3_mcq_9"
+                  value="C"
+                  class="sr-only"
+                  data-option-text="C) Power supply"
+                />
+                <span
+                  class="custom-radio w-5 h-5 border-2 border-gray-400 rounded-full mr-3 grid place-items-center flex-shrink-0"
+                >
+                  <span
+                    class="w-2.5 h-2.5 rounded-full bg-blue-600 opacity-0 transition-opacity"
+                  ></span>
+                </span>
+                <span>C) Power supply</span>
+              </label>
+              <label
+                class="option-button-label flex items-center w-full p-3 rounded-lg border-2 border-gray-300 text-left bg-white text-gray-700 hover:bg-gray-100 cursor-pointer"
+              >
+                <input
+                  type="radio"
+                  name="c3_mcq_9"
+                  value="D"
+                  class="sr-only"
+                  data-option-text="D) Memory"
+                />
+                <span
+                  class="custom-radio w-5 h-5 border-2 border-gray-400 rounded-full mr-3 grid place-items-center flex-shrink-0"
+                >
+                  <span
+                    class="w-2.5 h-2.5 rounded-full bg-blue-600 opacity-0 transition-opacity"
+                  ></span>
+                </span>
+                <span>D) Memory</span>
+              </label>
+            </div>
+          </div>
+
+          <div
+            class="space-y-3"
+            id="q-c3_mcq_10"
+            data-question-text="10. Using multiple processors to execute a single program is called:"
+          >
+            <p class="text-lg font-medium text-gray-900">
+              10. Using multiple processors to execute a single program is
+              called:
+            </p>
+            <div class="space-y-2" data-group="c3_mcq_10">
+              <label
+                class="option-button-label flex items-center w-full p-3 rounded-lg border-2 border-gray-300 text-left bg-white text-gray-700 hover:bg-gray-100 cursor-pointer"
+              >
+                <input
+                  type="radio"
+                  name="c3_mcq_10"
+                  value="A"
+                  class="sr-only"
+                  data-option-text="A) Binary processing"
+                />
+                <span
+                  class="custom-radio w-5 h-5 border-2 border-gray-400 rounded-full mr-3 grid place-items-center flex-shrink-0"
+                >
+                  <span
+                    class="w-2.5 h-2.5 rounded-full bg-blue-600 opacity-0 transition-opacity"
+                  ></span>
+                </span>
+                <span>A) Binary processing</span>
+              </label>
+              <label
+                class="option-button-label flex items-center w-full p-3 rounded-lg border-2 border-gray-300 text-left bg-white text-gray-700 hover:bg-gray-100 cursor-pointer"
+              >
+                <input
+                  type="radio"
+                  name="c3_mcq_10"
+                  value="B"
+                  class="sr-only"
+                  data-option-text="B) Parallel processing"
+                />
+                <span
+                  class="custom-radio w-5 h-5 border-2 border-gray-400 rounded-full mr-3 grid place-items-center flex-shrink-0"
+                >
+                  <span
+                    class="w-2.5 h-2.5 rounded-full bg-blue-600 opacity-0 transition-opacity"
+                  ></span>
+                </span>
+                <span>B) Parallel processing</span>
+              </label>
+              <label
+                class="option-button-label flex items-center w-full p-3 rounded-lg border-2 border-gray-300 text-left bg-white text-gray-700 hover:bg-gray-100 cursor-pointer"
+              >
+                <input
+                  type="radio"
+                  name="c3_mcq_10"
+                  value="C"
+                  class="sr-only"
+                  data-option-text="C) Digital processing"
+                />
+                <span
+                  class="custom-radio w-5 h-5 border-2 border-gray-400 rounded-full mr-3 grid place-items-center flex-shrink-0"
+                >
+                  <span
+                    class="w-2.5 h-2.5 rounded-full bg-blue-600 opacity-0 transition-opacity"
+                  ></span>
+                </span>
+                <span>C) Digital processing</span>
+              </label>
+              <label
+                class="option-button-label flex items-center w-full p-3 rounded-lg border-2 border-gray-300 text-left bg-white text-gray-700 hover:bg-gray-100 cursor-pointer"
+              >
+                <input
+                  type="radio"
+                  name="c3_mcq_10"
+                  value="D"
+                  class="sr-only"
+                  data-option-text="D) Clock speed"
+                />
+                <span
+                  class="custom-radio w-5 h-5 border-2 border-gray-400 rounded-full mr-3 grid place-items-center flex-shrink-0"
+                >
+                  <span
+                    class="w-2.5 h-2.5 rounded-full bg-blue-600 opacity-0 transition-opacity"
+                  ></span>
+                </span>
+                <span>D) Clock speed</span>
+              </label>
+            </div>
+          </div>
+
+          <h3 class="text-2xl font-semibold text-gray-800 pt-6">
+            Chapter 3 Quiz: True / False
+          </h3>
+
+          <div
+            class="space-y-3"
+            id="q-c3_tf_1"
+            data-question-text="1. True or False: The system unit is a case that contains the electronic components of the computer."
+          >
+            <p class="text-lg font-medium text-gray-900">
+              1. True or False: The system unit is a case that contains the
+              electronic components of the computer.
+            </p>
+            <div class="flex gap-4" data-group="c3_tf_1">
+              <label
+                class="option-button-label flex items-center w-full p-3 rounded-lg border-2 border-gray-300 text-left bg-white text-gray-700 hover:bg-gray-100 cursor-pointer"
+              >
+                <input
+                  type="radio"
+                  name="c3_tf_1"
+                  value="T"
+                  class="sr-only"
+                  data-option-text="True"
+                />
+                <span
+                  class="custom-radio w-5 h-5 border-2 border-gray-400 rounded-full mr-3 grid place-items-center flex-shrink-0"
+                >
+                  <span
+                    class="w-2.5 h-2.5 rounded-full bg-blue-600 opacity-0 transition-opacity"
+                  ></span>
+                </span>
+                <span>True</span>
+              </label>
+              <label
+                class="option-button-label flex items-center w-full p-3 rounded-lg border-2 border-gray-300 text-left bg-white text-gray-700 hover:bg-gray-100 cursor-pointer"
+              >
+                <input
+                  type="radio"
+                  name="c3_tf_1"
+                  value="F"
+                  class="sr-only"
+                  data-option-text="False"
+                />
+                <span
+                  class="custom-radio w-5 h-5 border-2 border-gray-400 rounded-full mr-3 grid place-items-center flex-shrink-0"
+                >
+                  <span
+                    class="w-2.5 h-2.5 rounded-full bg-blue-600 opacity-0 transition-opacity"
+                  ></span>
+                </span>
+                <span>False</span>
+              </label>
+            </div>
+          </div>
+
+          <div
+            class="space-y-3"
+            id="q-c3_tf_2"
+            data-question-text="2. True or False: The ALU is the component that directs and coordinates operations."
+          >
+            <p class="text-lg font-medium text-gray-900">
+              2. True or False: The ALU is the component that directs and
+              coordinates operations.
+            </p>
+            <div class="flex gap-4" data-group="c3_tf_2">
+              <label
+                class="option-button-label flex items-center w-full p-3 rounded-lg border-2 border-gray-300 text-left bg-white text-gray-700 hover:bg-gray-100 cursor-pointer"
+              >
+                <input
+                  type="radio"
+                  name="c3_tf_2"
+                  value="T"
+                  class="sr-only"
+                  data-option-text="True"
+                />
+                <span
+                  class="custom-radio w-5 h-5 border-2 border-gray-400 rounded-full mr-3 grid place-items-center flex-shrink-0"
+                >
+                  <span
+                    class="w-2.5 h-2.5 rounded-full bg-blue-600 opacity-0 transition-opacity"
+                  ></span>
+                </span>
+                <span>True</span>
+              </label>
+              <label
+                class="option-button-label flex items-center w-full p-3 rounded-lg border-2 border-gray-300 text-left bg-white text-gray-700 hover:bg-gray-100 cursor-pointer"
+              >
+                <input
+                  type="radio"
+                  name="c3_tf_2"
+                  value="F"
+                  class="sr-only"
+                  data-option-text="False"
+                />
+                <span
+                  class="custom-radio w-5 h-5 border-2 border-gray-400 rounded-full mr-3 grid place-items-center flex-shrink-0"
+                >
+                  <span
+                    class="w-2.5 h-2.5 rounded-full bg-blue-600 opacity-0 transition-opacity"
+                  ></span>
+                </span>
+                <span>False</span>
+              </label>
+            </div>
+          </div>
+
+          <div
+            class="space-y-3"
+            id="q-c3_tf_3"
+            data-question-text="3. True or False: Registers temporarily hold data and instructions."
+          >
+            <p class="text-lg font-medium text-gray-900">
+              3. True or False: Registers temporarily hold data and
+              instructions.
+            </p>
+            <div class="flex gap-4" data-group="c3_tf_3">
+              <label
+                class="option-button-label flex items-center w-full p-3 rounded-lg border-2 border-gray-300 text-left bg-white text-gray-700 hover:bg-gray-100 cursor-pointer"
+              >
+                <input
+                  type="radio"
+                  name="c3_tf_3"
+                  value="T"
+                  class="sr-only"
+                  data-option-text="True"
+                />
+                <span
+                  class="custom-radio w-5 h-5 border-2 border-gray-400 rounded-full mr-3 grid place-items-center flex-shrink-0"
+                >
+                  <span
+                    class="w-2.5 h-2.5 rounded-full bg-blue-600 opacity-0 transition-opacity"
+                  ></span>
+                </span>
+                <span>True</span>
+              </label>
+              <label
+                class="option-button-label flex items-center w-full p-3 rounded-lg border-2 border-gray-300 text-left bg-white text-gray-700 hover:bg-gray-100 cursor-pointer"
+              >
+                <input
+                  type="radio"
+                  name="c3_tf_3"
+                  value="F"
+                  class="sr-only"
+                  data-option-text="False"
+                />
+                <span
+                  class="custom-radio w-5 h-5 border-2 border-gray-400 rounded-full mr-3 grid place-items-center flex-shrink-0"
+                >
+                  <span
+                    class="w-2.5 h-2.5 rounded-full bg-blue-600 opacity-0 transition-opacity"
+                  ></span>
+                </span>
+                <span>False</span>
+              </label>
+            </div>
+          </div>
+
+          <div
+            class="space-y-3"
+            id="q-c3_tf_4"
+            data-question-text="4. True or False: Most computers are analog."
+          >
+            <p class="text-lg font-medium text-gray-900">
+              4. True or False: Most computers are analog.
+            </p>
+            <div class="flex gap-4" data-group="c3_tf_4">
+              <label
+                class="option-button-label flex items-center w-full p-3 rounded-lg border-2 border-gray-300 text-left bg-white text-gray-700 hover:bg-gray-100 cursor-pointer"
+              >
+                <input
+                  type="radio"
+                  name="c3_tf_4"
+                  value="T"
+                  class="sr-only"
+                  data-option-text="True"
+                />
+                <span
+                  class="custom-radio w-5 h-5 border-2 border-gray-400 rounded-full mr-3 grid place-items-center flex-shrink-0"
+                >
+                  <span
+                    class="w-2.5 h-2.5 rounded-full bg-blue-600 opacity-0 transition-opacity"
+                  ></span>
+                </span>
+                <span>True</span>
+              </label>
+              <label
+                class="option-button-label flex items-center w-full p-3 rounded-lg border-2 border-gray-300 text-left bg-white text-gray-700 hover:bg-gray-100 cursor-pointer"
+              >
+                <input
+                  type="radio"
+                  name="c3_tf_4"
+                  value="F"
+                  class="sr-only"
+                  data-option-text="False"
+                />
+                <span
+                  class="custom-radio w-5 h-5 border-2 border-gray-400 rounded-full mr-3 grid place-items-center flex-shrink-0"
+                >
+                  <span
+                    class="w-2.5 h-2.5 rounded-full bg-blue-600 opacity-0 transition-opacity"
+                  ></span>
+                </span>
+                <span>False</span>
+              </label>
+            </div>
+          </div>
+
+          <div
+            class="space-y-3"
+            id="q-c3_tf_5"
+            data-question-text="5. True or False: The binary system uses three unique digits (0, 1, and 2)."
+          >
+            <p class="text-lg font-medium text-gray-900">
+              5. True or False: The binary system uses three unique digits (0,
+              1, and 2).
+            </p>
+            <div class="flex gap-4" data-group="c3_tf_5">
+              <label
+                class="option-button-label flex items-center w-full p-3 rounded-lg border-2 border-gray-300 text-left bg-white text-gray-700 hover:bg-gray-100 cursor-pointer"
+              >
+                <input
+                  type="radio"
+                  name="c3_tf_5"
+                  value="T"
+                  class="sr-only"
+                  data-option-text="True"
+                />
+                <span
+                  class="custom-radio w-5 h-5 border-2 border-gray-400 rounded-full mr-3 grid place-items-center flex-shrink-0"
+                >
+                  <span
+                    class="w-2.5 h-2.5 rounded-full bg-blue-600 opacity-0 transition-opacity"
+                  ></span>
+                </span>
+                <span>True</span>
+              </label>
+              <label
+                class="option-button-label flex items-center w-full p-3 rounded-lg border-2 border-gray-300 text-left bg-white text-gray-700 hover:bg-gray-100 cursor-pointer"
+              >
+                <input
+                  type="radio"
+                  name="c3_tf_5"
+                  value="F"
+                  class="sr-only"
+                  data-option-text="False"
+                />
+                <span
+                  class="custom-radio w-5 h-5 border-2 border-gray-400 rounded-full mr-3 grid place-items-center flex-shrink-0"
+                >
+                  <span
+                    class="w-2.5 h-2.5 rounded-full bg-blue-600 opacity-0 transition-opacity"
+                  ></span>
+                </span>
+                <span>False</span>
+              </label>
+            </div>
+          </div>
+
+          <div
+            class="space-y-3"
+            id="q-c3_tf_6"
+            data-question-text="6. True or False: A computer chip contains integrated circuits."
+          >
+            <p class="text-lg font-medium text-gray-900">
+              6. True or False: A computer chip contains integrated circuits.
+            </p>
+            <div class="flex gap-4" data-group="c3_tf_6">
+              <label
+                class="option-button-label flex items-center w-full p-3 rounded-lg border-2 border-gray-300 text-left bg-white text-gray-700 hover:bg-gray-100 cursor-pointer"
+              >
+                <input
+                  type="radio"
+                  name="c3_tf_6"
+                  value="T"
+                  class="sr-only"
+                  data-option-text="True"
+                />
+                <span
+                  class="custom-radio w-5 h-5 border-2 border-gray-400 rounded-full mr-3 grid place-items-center flex-shrink-0"
+                >
+                  <span
+                    class="w-2.5 h-2.5 rounded-full bg-blue-600 opacity-0 transition-opacity"
+                  ></span>
+                </span>
+                <span>True</span>
+              </label>
+              <label
+                class="option-button-label flex items-center w-full p-3 rounded-lg border-2 border-gray-300 text-left bg-white text-gray-700 hover:bg-gray-100 cursor-pointer"
+              >
+                <input
+                  type="radio"
+                  name="c3_tf_6"
+                  value="F"
+                  class="sr-only"
+                  data-option-text="False"
+                />
+                <span
+                  class="custom-radio w-5 h-5 border-2 border-gray-400 rounded-full mr-3 grid place-items-center flex-shrink-0"
+                >
+                  <span
+                    class="w-2.5 h-2.5 rounded-full bg-blue-600 opacity-0 transition-opacity"
+                  ></span>
+                </span>
+                <span>False</span>
+              </label>
+            </div>
+          </div>
+
+          <div
+            class="space-y-3"
+            id="q-c3_tf_7"
+            data-question-text="7. True or False: Clock speed is measured in Bytes per second (Bps)."
+          >
+            <p class="text-lg font-medium text-gray-900">
+              7. True or False: Clock speed is measured in Bytes per second
+              (Bps).
+            </p>
+            <div class="flex gap-4" data-group="c3_tf_7">
+              <label
+                class="option-button-label flex items-center w-full p-3 rounded-lg border-2 border-gray-300 text-left bg-white text-gray-700 hover:bg-gray-100 cursor-pointer"
+              >
+                <input
+                  type="radio"
+                  name="c3_tf_7"
+                  value="T"
+                  class="sr-only"
+                  data-option-text="True"
+                />
+                <span
+                  class="custom-radio w-5 h-5 border-2 border-gray-400 rounded-full mr-3 grid place-items-center flex-shrink-0"
+                >
+                  <span
+                    class="w-2.5 h-2.5 rounded-full bg-blue-600 opacity-0 transition-opacity"
+                  ></span>
+                </span>
+                <span>True</span>
+              </label>
+              <label
+                class="option-button-label flex items-center w-full p-3 rounded-lg border-2 border-gray-300 text-left bg-white text-gray-700 hover:bg-gray-100 cursor-pointer"
+              >
+                <input
+                  type="radio"
+                  name="c3_tf_7"
+                  value="F"
+                  class="sr-only"
+                  data-option-text="False"
+                />
+                <span
+                  class="custom-radio w-5 h-5 border-2 border-gray-400 rounded-full mr-3 grid place-items-center flex-shrink-0"
+                >
+                  <span
+                    class="w-2.5 h-2.5 rounded-full bg-blue-600 opacity-0 transition-opacity"
+                  ></span>
+                </span>
+                <span>False</span>
+              </label>
+            </div>
+          </div>
+
+          <div
+            class="space-y-3"
+            id="q-c3_tf_8"
+            data-question-text="8. True or False: Analog signals are in one of two states: on or off."
+          >
+            <p class="text-lg font-medium text-gray-900">
+              8. True or False: Analog signals are in one of two states: on or
+              off.
+            </p>
+            <div class="flex gap-4" data-group="c3_tf_8">
+              <label
+                class="option-button-label flex items-center w-full p-3 rounded-lg border-2 border-gray-300 text-left bg-white text-gray-700 hover:bg-gray-100 cursor-pointer"
+              >
+                <input
+                  type="radio"
+                  name="c3_tf_8"
+                  value="T"
+                  class="sr-only"
+                  data-option-text="True"
+                />
+                <span
+                  class="custom-radio w-5 h-5 border-2 border-gray-400 rounded-full mr-3 grid place-items-center flex-shrink-0"
+                >
+                  <span
+                    class="w-2.5 h-2.5 rounded-full bg-blue-600 opacity-0 transition-opacity"
+                  ></span>
+                </span>
+                <span>True</span>
+              </label>
+              <label
+                class="option-button-label flex items-center w-full p-3 rounded-lg border-2 border-gray-300 text-left bg-white text-gray-700 hover:bg-gray-100 cursor-pointer"
+              >
+                <input
+                  type="radio"
+                  name="c3_tf_8"
+                  value="F"
+                  class="sr-only"
+                  data-option-text="False"
+                />
+                <span
+                  class="custom-radio w-5 h-5 border-2 border-gray-400 rounded-full mr-3 grid place-items-center flex-shrink-0"
+                >
+                  <span
+                    class="w-2.5 h-2.5 rounded-full bg-blue-600 opacity-0 transition-opacity"
+                  ></span>
+                </span>
+                <span>False</span>
+              </label>
+            </div>
+          </div>
+
+          <div
+            class="space-y-3"
+            id="q-c3_tf_9"
+            data-question-text="9. True or False: A single binary digit (0 or 1) is called a byte."
+          >
+            <p class="text-lg font-medium text-gray-900">
+              9. True or False: A single binary digit (0 or 1) is called a byte.
+            </p>
+            <div class="flex gap-4" data-group="c3_tf_9">
+              <label
+                class="option-button-label flex items-center w-full p-3 rounded-lg border-2 border-gray-300 text-left bg-white text-gray-700 hover:bg-gray-100 cursor-pointer"
+              >
+                <input
+                  type="radio"
+                  name="c3_tf_9"
+                  value="T"
+                  class="sr-only"
+                  data-option-text="True"
+                />
+                <span
+                  class="custom-radio w-5 h-5 border-2 border-gray-400 rounded-full mr-3 grid place-items-center flex-shrink-0"
+                >
+                  <span
+                    class="w-2.5 h-2.5 rounded-full bg-blue-600 opacity-0 transition-opacity"
+                  ></span>
+                </span>
+                <span>True</span>
+              </label>
+              <label
+                class="option-button-label flex items-center w-full p-3 rounded-lg border-2 border-gray-300 text-left bg-white text-gray-700 hover:bg-gray-100 cursor-pointer"
+              >
+                <input
+                  type="radio"
+                  name="c3_tf_9"
+                  value="F"
+                  class="sr-only"
+                  data-option-text="False"
+                />
+                <span
+                  class="custom-radio w-5 h-5 border-2 border-gray-400 rounded-full mr-3 grid place-items-center flex-shrink-0"
+                >
+                  <span
+                    class="w-2.5 h-2.5 rounded-full bg-blue-600 opacity-0 transition-opacity"
+                  ></span>
+                </span>
+                <span>False</span>
+              </label>
+            </div>
+          </div>
+
+          <div
+            class="space-y-3"
+            id="q-c3_tf_10"
+            data-question-text="10. True or False: The motherboard contains slots for adapter cards."
+          >
+            <p class="text-lg font-medium text-gray-900">
+              10. True or False: The motherboard contains slots for adapter
+              cards.
+            </p>
+            <div class="flex gap-4" data-group="c3_tf_10">
+              <label
+                class="option-button-label flex items-center w-full p-3 rounded-lg border-2 border-gray-300 text-left bg-white text-gray-700 hover:bg-gray-100 cursor-pointer"
+              >
+                <input
+                  type="radio"
+                  name="c3_tf_10"
+                  value="T"
+                  class="sr-only"
+                  data-option-text="True"
+                />
+                <span
+                  class="custom-radio w-5 h-5 border-2 border-gray-400 rounded-full mr-3 grid place-items-center flex-shrink-0"
+                >
+                  <span
+                    class="w-2.5 h-2.5 rounded-full bg-blue-600 opacity-0 transition-opacity"
+                  ></span>
+                </span>
+                <span>True</span>
+              </label>
+              <label
+                class="option-button-label flex items-center w-full p-3 rounded-lg border-2 border-gray-300 text-left bg-white text-gray-700 hover:bg-gray-100 cursor-pointer"
+              >
+                <input
+                  type="radio"
+                  name="c3_tf_10"
+                  value="F"
+                  class="sr-only"
+                  data-option-text="False"
+                />
+                <span
+                  class="custom-radio w-5 h-5 border-2 border-gray-400 rounded-full mr-3 grid place-items-center flex-shrink-0"
+                >
+                  <span
+                    class="w-2.5 h-2.5 rounded-full bg-blue-600 opacity-0 transition-opacity"
+                  ></span>
+                </span>
+                <span>False</span>
+              </label>
+            </div>
+          </div>
+        </section>
+
+        <section id="chapter4" class="space-y-6">
+          <div class="border-b-2 border-blue-200 pb-4">
+            <h2 class="text-3xl font-semibold text-blue-600 mb-4">
+              Chapter: 4
+            </h2>
+            <div class="bg-blue-50 p-4 rounded-lg border-l-4 border-blue-500">
+              <h3 class="font-bold text-lg text-blue-800 mb-2">
+                Chapter Summary
+              </h3>
+              <p class="text-gray-700 leading-relaxed">
+                <strong>Storage</strong> refers to hardware that records and
+                retrieves items to and from storage media.
+                <strong>Writing</strong> transfers items from memory to storage,
+                while <strong>Reading</strong> transfers them from storage into
+                memory. Common storage types include
+                <strong>Hard Disks</strong> (which use magnetic platters) and
+                <strong>Flash Memory</strong>, a solid-state media with no
+                moving parts (e.g., SSDs, USB drives).
+                <strong>Cloud Storage</strong> is an internet service for remote
+                storage, offering universal access and backups.
+                <strong>Optical Discs</strong> (like CDs, DVDs, and Blu-ray) are
+                read by a laser. Data is organized in a hierarchy: a
+                <strong>Character</strong> (one byte), a
+                <strong>Field</strong> (related characters), a
+                <strong>Record</strong> (related fields), and a
+                <strong>Data File</strong> (related records).
+              </p>
+            </div>
+          </div>
+
+          <h3 class="text-2xl font-semibold text-gray-800">
+            Chapter 4 Quiz: MCQ
+          </h3>
+
+          <div
+            class="space-y-3"
+            id="q-c4_mcq_1"
+            data-question-text="1. The process of transferring items *from* a storage medium *into* memory is called:"
+          >
+            <p class="text-lg font-medium text-gray-900">
+              1. The process of transferring items *from* a storage medium
+              *into* memory is called:
+            </p>
+            <div class="space-y-2" data-group="c4_mcq_1">
+              <label
+                class="option-button-label flex items-center w-full p-3 rounded-lg border-2 border-gray-300 text-left bg-white text-gray-700 hover:bg-gray-100 cursor-pointer"
+              >
+                <input
+                  type="radio"
+                  name="c4_mcq_1"
+                  value="A"
+                  class="sr-only"
+                  data-option-text="A) Writing"
+                />
+                <span
+                  class="custom-radio w-5 h-5 border-2 border-gray-400 rounded-full mr-3 grid place-items-center flex-shrink-0"
+                >
+                  <span
+                    class="w-2.5 h-2.5 rounded-full bg-blue-600 opacity-0 transition-opacity"
+                  ></span>
+                </span>
+                <span>A) Writing</span>
+              </label>
+              <label
+                class="option-button-label flex items-center w-full p-3 rounded-lg border-2 border-gray-300 text-left bg-white text-gray-700 hover:bg-gray-100 cursor-pointer"
+              >
+                <input
+                  type="radio"
+                  name="c4_mcq_1"
+                  value="B"
+                  class="sr-only"
+                  data-option-text="B) Reading"
+                />
+                <span
+                  class="custom-radio w-5 h-5 border-2 border-gray-400 rounded-full mr-3 grid place-items-center flex-shrink-0"
+                >
+                  <span
+                    class="w-2.5 h-2.5 rounded-full bg-blue-600 opacity-0 transition-opacity"
+                  ></span>
+                </span>
+                <span>B) Reading</span>
+              </label>
+              <label
+                class="option-button-label flex items-center w-full p-3 rounded-lg border-2 border-gray-300 text-left bg-white text-gray-700 hover:bg-gray-100 cursor-pointer"
+              >
+                <input
+                  type="radio"
+                  name="c4_mcq_1"
+                  value="C"
+                  class="sr-only"
+                  data-option-text="C) Storing"
+                />
+                <span
+                  class="custom-radio w-5 h-5 border-2 border-gray-400 rounded-full mr-3 grid place-items-center flex-shrink-0"
+                >
+                  <span
+                    class="w-2.5 h-2.5 rounded-full bg-blue-600 opacity-0 transition-opacity"
+                  ></span>
+                </span>
+                <span>C) Storing</span>
+              </label>
+              <label
+                class="option-button-label flex items-center w-full p-3 rounded-lg border-2 border-gray-300 text-left bg-white text-gray-700 hover:bg-gray-100 cursor-pointer"
+              >
+                <input
+                  type="radio"
+                  name="c4_mcq_1"
+                  value="D"
+                  class="sr-only"
+                  data-option-text="D) Formatting"
+                />
+                <span
+                  class="custom-radio w-5 h-5 border-2 border-gray-400 rounded-full mr-3 grid place-items-center flex-shrink-0"
+                >
+                  <span
+                    class="w-2.5 h-2.5 rounded-full bg-blue-600 opacity-0 transition-opacity"
+                  ></span>
+                </span>
+                <span>D) Formatting</span>
+              </label>
+            </div>
+          </div>
+
+          <div
+            class="space-y-3"
+            id="q-c4_mcq_2"
+            data-question-text="2. Which storage type contains no moving parts?"
+          >
+            <p class="text-lg font-medium text-gray-900">
+              2. Which storage type contains no moving parts?
+            </p>
+            <div class="space-y-2" data-group="c4_mcq_2">
+              <label
+                class="option-button-label flex items-center w-full p-3 rounded-lg border-2 border-gray-300 text-left bg-white text-gray-700 hover:bg-gray-100 cursor-pointer"
+              >
+                <input
+                  type="radio"
+                  name="c4_mcq_2"
+                  value="A"
+                  class="sr-only"
+                  data-option-text="A) Hard Disk"
+                />
+                <span
+                  class="custom-radio w-5 h-5 border-2 border-gray-400 rounded-full mr-3 grid place-items-center flex-shrink-0"
+                >
+                  <span
+                    class="w-2.5 h-2.5 rounded-full bg-blue-600 opacity-0 transition-opacity"
+                  ></span>
+                </span>
+                <span>A) Hard Disk</span>
+              </label>
+              <label
+                class="option-button-label flex items-center w-full p-3 rounded-lg border-2 border-gray-300 text-left bg-white text-gray-700 hover:bg-gray-100 cursor-pointer"
+              >
+                <input
+                  type="radio"
+                  name="c4_mcq_2"
+                  value="B"
+                  class="sr-only"
+                  data-option-text="B) Optical Disc"
+                />
+                <span
+                  class="custom-radio w-5 h-5 border-2 border-gray-400 rounded-full mr-3 grid place-items-center flex-shrink-0"
+                >
+                  <span
+                    class="w-2.5 h-2.5 rounded-full bg-blue-600 opacity-0 transition-opacity"
+                  ></span>
+                </span>
+                <span>B) Optical Disc</span>
+              </label>
+              <label
+                class="option-button-label flex items-center w-full p-3 rounded-lg border-2 border-gray-300 text-left bg-white text-gray-700 hover:bg-gray-100 cursor-pointer"
+              >
+                <input
+                  type="radio"
+                  name="c4_mcq_2"
+                  value="C"
+                  class="sr-only"
+                  data-option-text="C) Flash Memory"
+                />
+                <span
+                  class="custom-radio w-5 h-5 border-2 border-gray-400 rounded-full mr-3 grid place-items-center flex-shrink-0"
+                >
+                  <span
+                    class="w-2.5 h-2.5 rounded-full bg-blue-600 opacity-0 transition-opacity"
+                  ></span>
+                </span>
+                <span>C) Flash Memory</span>
+              </label>
+              <label
+                class="option-button-label flex items-center w-full p-3 rounded-lg border-2 border-gray-300 text-left bg-white text-gray-700 hover:bg-gray-100 cursor-pointer"
+              >
+                <input
+                  type="radio"
+                  name="c4_mcq_2"
+                  value="D"
+                  class="sr-only"
+                  data-option-text="D) Tape"
+                />
+                <span
+                  class="custom-radio w-5 h-5 border-2 border-gray-400 rounded-full mr-3 grid place-items-center flex-shrink-0"
+                >
+                  <span
+                    class="w-2.5 h-2.5 rounded-full bg-blue-600 opacity-0 transition-opacity"
+                  ></span>
+                </span>
+                <span>D) Tape</span>
+              </label>
+            </div>
+          </div>
+
+          <div
+            class="space-y-3"
+            id="q-c4_mcq_3"
+            data-question-text="3. An internet service that provides storage to computer users is called:"
+          >
+            <p class="text-lg font-medium text-gray-900">
+              3. An internet service that provides storage to computer users is
+              called:
+            </p>
+            <div class="space-y-2" data-group="c4_mcq_3">
+              <label
+                class="option-button-label flex items-center w-full p-3 rounded-lg border-2 border-gray-300 text-left bg-white text-gray-700 hover:bg-gray-100 cursor-pointer"
+              >
+                <input
+                  type="radio"
+                  name="c4_mcq_3"
+                  value="A"
+                  class="sr-only"
+                  data-option-text="A) NAS"
+                />
+                <span
+                  class="custom-radio w-5 h-5 border-2 border-gray-400 rounded-full mr-3 grid place-items-center flex-shrink-0"
+                >
+                  <span
+                    class="w-2.5 h-2.5 rounded-full bg-blue-600 opacity-0 transition-opacity"
+                  ></span>
+                </span>
+                <span>A) NAS</span>
+              </label>
+              <label
+                class="option-button-label flex items-center w-full p-3 rounded-lg border-2 border-gray-300 text-left bg-white text-gray700 hover:bg-gray-100 cursor-pointer"
+              >
+                <input
+                  type="radio"
+                  name="c4_mcq_3"
+                  value="B"
+                  class="sr-only"
+                  data-option-text="B) SSD"
+                />
+                <span
+                  class="custom-radio w-5 h-5 border-2 border-gray-400 rounded-full mr-3 grid place-items-center flex-shrink-0"
+                >
+                  <span
+                    class="w-2.5 h-2.5 rounded-full bg-blue-600 opacity-0 transition-opacity"
+                  ></span>
+                </span>
+                <span>B) SSD</span>
+              </label>
+              <label
+                class="option-button-label flex items-center w-full p-3 rounded-lg border-2 border-gray-300 text-left bg-white text-gray-700 hover:bg-gray-100 cursor-pointer"
+              >
+                <input
+                  type="radio"
+                  name="c4_mcq_3"
+                  value="C"
+                  class="sr-only"
+                  data-option-text="C) Cloud Storage"
+                />
+                <span
+                  class="custom-radio w-5 h-5 border-2 border-gray-400 rounded-full mr-3 grid place-items-center flex-shrink-0"
+                >
+                  <span
+                    class="w-2.5 h-2.5 rounded-full bg-blue-600 opacity-0 transition-opacity"
+                  ></span>
+                </span>
+                <span>C) Cloud Storage</span>
+              </label>
+              <label
+                class="option-button-label flex items-center w-full p-3 rounded-lg border-2 border-gray-300 text-left bg-white text-gray-700 hover:bg-gray-100 cursor-pointer"
+              >
+                <input
+                  type="radio"
+                  name="c4_mcq_3"
+                  value="D"
+                  class="sr-only"
+                  data-option-text="D) RAID"
+                />
+                <span
+                  class="custom-radio w-5 h-5 border-2 border-gray-400 rounded-full mr-3 grid place-items-center flex-shrink-0"
+                >
+                  <span
+                    class="w-2.5 h-2.5 rounded-full bg-blue-600 opacity-0 transition-opacity"
+                  ></span>
+                </span>
+                <span>D) RAID</span>
+              </label>
+            </div>
+          </div>
+
+          <div
+            class="space-y-3"
+            id="q-c4_mcq_4"
+            data-question-text="4. Which optical disc type is an erasable multisession disc?"
+          >
+            <p class="text-lg font-medium text-gray-900">
+              4. Which optical disc type is an erasable multisession disc?
+            </p>
+            <div class="space-y-2" data-group="c4_mcq_4">
+              <label
+                class="option-button-label flex items-center w-full p-3 rounded-lg border-2 border-gray-300 text-left bg-white text-gray-700 hover:bg-gray-100 cursor-pointer"
+              >
+                <input
+                  type="radio"
+                  name="c4_mcq_4"
+                  value="A"
+                  class="sr-only"
+                  data-option-text="A) CD-ROM"
+                />
+                <span
+                  class="custom-radio w-5 h-5 border-2 border-gray-400 rounded-full mr-3 grid place-items-center flex-shrink-0"
+                >
+                  <span
+                    class="w-2.5 h-2.5 rounded-full bg-blue-600 opacity-0 transition-opacity"
+                  ></span>
+                </span>
+                <span>A) CD-ROM</span>
+              </label>
+              <label
+                class="option-button-label flex items-center w-full p-3 rounded-lg border-2 border-gray-300 text-left bg-white text-gray-700 hover:bg-gray-100 cursor-pointer"
+              >
+                <input
+                  type="radio"
+                  name="c4_mcq_4"
+                  value="B"
+                  class="sr-only"
+                  data-option-text="B) CD-R"
+                />
+                <span
+                  class="custom-radio w-5 h-5 border-2 border-gray-400 rounded-full mr-3 grid place-items-center flex-shrink-0"
+                >
+                  <span
+                    class="w-2.5 h-2.5 rounded-full bg-blue-600 opacity-0 transition-opacity"
+                  ></span>
+                </span>
+                <span>B) CD-R</span>
+              </label>
+              <label
+                class="option-button-label flex items-center w-full p-3 rounded-lg border-2 border-gray-300 text-left bg-white text-gray-700 hover:bg-gray-100 cursor-pointer"
+              >
+                <input
+                  type="radio"
+                  name="c4_mcq_4"
+                  value="C"
+                  class="sr-only"
+                  data-option-text="C) DVD-ROM"
+                />
+                <span
+                  class="custom-radio w-5 h-5 border-2 border-gray-400 rounded-full mr-3 grid place-items-center flex-shrink-0"
+                >
+                  <span
+                    class="w-2.5 h-2.5 rounded-full bg-blue-600 opacity-0 transition-opacity"
+                  ></span>
+                </span>
+                <span>C) DVD-ROM</span>
+              </label>
+              <label
+                class="option-button-label flex items-center w-full p-3 rounded-lg border-2 border-gray-300 text-left bg-white text-gray-700 hover:bg-gray-100 cursor-pointer"
+              >
+                <input
+                  type="radio"
+                  name="c4_mcq_4"
+                  value="D"
+                  class="sr-only"
+                  data-option-text="D) CD-RW"
+                />
+                <span
+                  class="custom-radio w-5 h-5 border-2 border-gray-400 rounded-full mr-3 grid place-items-center flex-shrink-0"
+                >
+                  <span
+                    class="w-2.5 h-2.5 rounded-full bg-blue-600 opacity-0 transition-opacity"
+                  ></span>
+                </span>
+                <span>D) CD-RW</span>
+              </label>
+            </div>
+          </div>
+
+          <div
+            class="space-y-3"
+            id="q-c4_mcq_5"
+            data-question-text="5. In the data hierarchy, what is a group of related fields?"
+          >
+            <p class="text-lg font-medium text-gray-900">
+              5. In the data hierarchy, what is a group of related fields?
+            </p>
+            <div class="space-y-2" data-group="c4_mcq_5">
+              <label
+                class="option-button-label flex items-center w-full p-3 rounded-lg border-2 border-gray-300 text-left bg-white text-gray-700 hover:bg-gray-100 cursor-pointer"
+              >
+                <input
+                  type="radio"
+                  name="c4_mcq_5"
+                  value="A"
+                  class="sr-only"
+                  data-option-text="A) A File"
+                />
+                <span
+                  class="custom-radio w-5 h-5 border-2 border-gray-400 rounded-full mr-3 grid place-items-center flex-shrink-0"
+                >
+                  <span
+                    class="w-2.5 h-2.5 rounded-full bg-blue-600 opacity-0 transition-opacity"
+                  ></span>
+                </span>
+                <span>A) A File</span>
+              </label>
+              <label
+                class="option-button-label flex items-center w-full p-3 rounded-lg border-2 border-gray-300 text-left bg-white text-gray-700 hover:bg-gray-100 cursor-pointer"
+              >
+                <input
+                  type="radio"
+                  name="c4_mcq_5"
+                  value="B"
+                  class="sr-only"
+                  data-option-text="B) A Record"
+                />
+                <span
+                  class="custom-radio w-5 h-5 border-2 border-gray-400 rounded-full mr-3 grid place-items-center flex-shrink-0"
+                >
+                  <span
+                    class="w-2.5 h-2.5 rounded-full bg-blue-600 opacity-0 transition-opacity"
+                  ></span>
+                </span>
+                <span>B) A Record</span>
+              </label>
+              <label
+                class="option-button-label flex items-center w-full p-3 rounded-lg border-2 border-gray-300 text-left bg-white text-gray-700 hover:bg-gray-100 cursor-pointer"
+              >
+                <input
+                  type="radio"
+                  name="c4_mcq_5"
+                  value="C"
+                  class="sr-only"
+                  data-option-text="C) A Character"
+                />
+                <span
+                  class="custom-radio w-5 h-5 border-2 border-gray-400 rounded-full mr-3 grid place-items-center flex-shrink-0"
+                >
+                  <span
+                    class="w-2.5 h-2.5 rounded-full bg-blue-600 opacity-0 transition-opacity"
+                  ></span>
+                </span>
+                <span>C) A Character</span>
+              </label>
+              <label
+                class="option-button-label flex items-center w-full p-3 rounded-lg border-2 border-gray-300 text-left bg-white text-gray-700 hover:bg-gray-100 cursor-pointer"
+              >
+                <input
+                  type="radio"
+                  name="c4_mcq_5"
+                  value="D"
+                  class="sr-only"
+                  data-option-text="D) A Byte"
+                />
+                <span
+                  class="custom-radio w-5 h-5 border-2 border-gray-400 rounded-full mr-3 grid place-items-center flex-shrink-0"
+                >
+                  <span
+                    class="w-2.5 h-2.5 rounded-full bg-blue-600 opacity-0 transition-opacity"
+                  ></span>
+                </span>
+                <span>D) A Byte</span>
+              </label>
+            </div>
+          </div>
+
+          <div
+            class="space-y-3"
+            id="q-c4_mcq_6"
+            data-question-text="6. A group of two or more integrated hard disks is called:"
+          >
+            <p class="text-lg font-medium text-gray-900">
+              6. A group of two or more integrated hard disks is called:
+            </p>
+            <div class="space-y-2" data-group="c4_mcq_6">
+              <label
+                class="option-button-label flex items-center w-full p-3 rounded-lg border-2 border-gray-300 text-left bg-white text-gray-700 hover:bg-gray-100 cursor-pointer"
+              >
+                <input
+                  type="radio"
+                  name="c4_mcq_6"
+                  value="A"
+                  class="sr-only"
+                  data-option-text="A) NAS"
+                />
+                <span
+                  class="custom-radio w-5 h-5 border-2 border-gray-400 rounded-full mr-3 grid place-items-center flex-shrink-0"
+                >
+                  <span
+                    class="w-2.5 h-2.5 rounded-full bg-blue-600 opacity-0 transition-opacity"
+                  ></span>
+                </span>
+                <span>A) NAS</span>
+              </label>
+              <label
+                class="option-button-label flex items-center w-full p-3 rounded-lg border-2 border-gray-300 text-left bg-white text-gray-700 hover:bg-gray-100 cursor-pointer"
+              >
+                <input
+                  type="radio"
+                  name="c4_mcq_6"
+                  value="B"
+                  class="sr-only"
+                  data-option-text="B) SSD"
+                />
+                <span
+                  class="custom-radio w-5 h-5 border-2 border-gray-400 rounded-full mr-3 grid place-items-center flex-shrink-0"
+                >
+                  <span
+                    class="w-2.5 h-2.5 rounded-full bg-blue-600 opacity-0 transition-opacity"
+                  ></span>
+                </span>
+                <span>B) SSD</span>
+              </label>
+              <label
+                class="option-button-label flex items-center w-full p-3 rounded-lg border-2 border-gray-300 text-left bg-white text-gray-700 hover:bg-gray-100 cursor-pointer"
+              >
+                <input
+                  type="radio"
+                  name="c4_mcq_6"
+                  value="C"
+                  class="sr-only"
+                  data-option-text="C) RAID"
+                />
+                <span
+                  class="custom-radio w-5 h-5 border-2 border-gray-400 rounded-full mr-3 grid place-items-center flex-shrink-0"
+                >
+                  <span
+                    class="w-2.5 h-2.5 rounded-full bg-blue-600 opacity-0 transition-opacity"
+                  ></span>
+                </span>
+                <span>C) RAID</span>
+              </label>
+              <label
+                class="option-button-label flex items-center w-full p-3 rounded-lg border-2 border-gray-300 text-left bg-white text-gray-700 hover:bg-gray-100 cursor-pointer"
+              >
+                <input
+                  type="radio"
+                  name="c4_mcq_6"
+                  value="D"
+                  class="sr-only"
+                  data-option-text="D) USB"
+                />
+                <span
+                  class="custom-radio w-5 h-5 border-2 border-gray-400 rounded-full mr-3 grid place-items-center flex-shrink-0"
+                >
+                  <span
+                    class="w-2.5 h-2.5 rounded-full bg-blue-600 opacity-0 transition-opacity"
+                  ></span>
+                </span>
+                <span>D) USB</span>
+              </label>
+            </div>
+          </div>
+
+          <div
+            class="space-y-3"
+            id="q-c4_mcq_7"
+            data-question-text="7. Which is listed as an advantage of SSDs over magnetic hard disks?"
+          >
+            <p class="text-lg font-medium text-gray-900">
+              7. Which is listed as an advantage of SSDs over magnetic hard
+              disks?
+            </p>
+            <div class="space-y-2" data-group="c4_mcq_7">
+              <label
+                class="option-button-label flex items-center w-full p-3 rounded-lg border-2 border-gray-300 text-left bg-white text-gray-700 hover:bg-gray-100 cursor-pointer"
+              >
+                <input
+                  type="radio"
+                  name="c4_mcq_7"
+                  value="A"
+                  class="sr-only"
+                  data-option-text="A) Lower cost"
+                />
+                <span
+                  class="custom-radio w-5 h-5 border-2 border-gray-400 rounded-full mr-3 grid place-items-center flex-shrink-0"
+                >
+                  <span
+                    class="w-2.5 h-2.5 rounded-full bg-blue-600 opacity-0 transition-opacity"
+                  ></span>
+                </span>
+                <span>A) Lower cost</span>
+              </label>
+              <label
+                class="option-button-label flex items-center w-full p-3 rounded-lg border-2 border-gray-300 text-left bg-white text-gray-700 hover:bg-gray-100 cursor-pointer"
+              >
+                <input
+                  type="radio"
+                  name="c4_mcq_7"
+                  value="B"
+                  class="sr-only"
+                  data-option-text="B) Holds more data"
+                />
+                <span
+                  class="custom-radio w-5 h-5 border-2 border-gray-400 rounded-full mr-3 grid place-items-center flex-shrink-0"
+                >
+                  <span
+                    class="w-2.5 h-2.5 rounded-full bg-blue-600 opacity-0 transition-opacity"
+                  ></span>
+                </span>
+                <span>B) Holds more data</span>
+              </label>
+              <label
+                class="option-button-label flex items-center w-full p-3 rounded-lg border-2 border-gray-300 text-left bg-white text-gray-700 hover:bg-gray-100 cursor-pointer"
+              >
+                <input
+                  type="radio"
+                  name="c4_mcq_7"
+                  value="C"
+                  class="sr-only"
+                  data-option-text="C) Faster access time"
+                />
+                <span
+                  class="custom-radio w-5 h-5 border-2 border-gray-400 rounded-full mr-3 grid place-items-center flex-shrink-0"
+                >
+                  <span
+                    class="w-2.5 h-2.5 rounded-full bg-blue-600 opacity-0 transition-opacity"
+                  ></span>
+                </span>
+                <span>C) Faster access time</span>
+              </label>
+              <label
+                class="option-button-label flex items-center w-full p-3 rounded-lg border-2 border-gray-300 text-left bg-white text-gray-700 hover:bg-gray-100 cursor-pointer"
+              >
+                <input
+                  type="radio"
+                  name="c4_mcq_7"
+                  value="D"
+                  class="sr-only"
+                  data-option-text="D) Uses magnetic particles"
+                />
+                <span
+                  class="custom-radio w-5 h-5 border-2 border-gray-400 rounded-full mr-3 grid place-items-center flex-shrink-0"
+                >
+                  <span
+                    class="w-2.5 h-2.5 rounded-full bg-blue-600 opacity-0 transition-opacity"
+                  ></span>
+                </span>
+                <span>D) Uses magnetic particles</span>
+              </label>
+            </div>
+          </div>
+
+          <div
+            class="space-y-3"
+            id="q-c4_mcq_8"
+            data-question-text="8. A removable flash memory device you insert into a computer or mobile device is a:"
+          >
+            <p class="text-lg font-medium text-gray-900">
+              8. A removable flash memory device you insert into a computer or
+              mobile device is a:
+            </p>
+            <div class="space-y-2" data-group="c4_mcq_8">
+              <label
+                class="option-button-label flex items-center w-full p-3 rounded-lg border-2 border-gray-300 text-left bg-white text-gray-700 hover:bg-gray-100 cursor-pointer"
+              >
+                <input
+                  type="radio"
+                  name="c4_mcq_8"
+                  value="A"
+                  class="sr-only"
+                  data-option-text="A) Memory card"
+                />
+                <span
+                  class="custom-radio w-5 h-5 border-2 border-gray-400 rounded-full mr-3 grid place-items-center flex-shrink-0"
+                >
+                  <span
+                    class="w-2.5 h-2.5 rounded-full bg-blue-600 opacity-0 transition-opacity"
+                  ></span>
+                </span>
+                <span>A) Memory card</span>
+              </label>
+              <label
+                class="option-button-label flex items-center w-full p-3 rounded-lg border-2 border-gray-300 text-left bg-white text-gray-700 hover:bg-gray-100 cursor-pointer"
+              >
+                <input
+                  type="radio"
+                  name="c4_mcq_8"
+                  value="B"
+                  class="sr-only"
+                  data-option-text="B) Hard disk"
+                />
+                <span
+                  class="custom-radio w-5 h-5 border-2 border-gray-400 rounded-full mr-3 grid place-items-center flex-shrink-0"
+                >
+                  <span
+                    class="w-2.5 h-2.5 rounded-full bg-blue-600 opacity-0 transition-opacity"
+                  ></span>
+                </span>
+                <span>B) Hard disk</span>
+              </label>
+              <label
+                class="option-button-label flex items-center w-full p-3 rounded-lg border-2 border-gray-300 text-left bg-white text-gray-700 hover:bg-gray-100 cursor-pointer"
+              >
+                <input
+                  type="radio"
+                  name="c4_mcq_8"
+                  value="C"
+                  class="sr-only"
+                  data-option-text="C) CD-ROM"
+                />
+                <span
+                  class="custom-radio w-5 h-5 border-2 border-gray-400 rounded-full mr-3 grid place-items-center flex-shrink-0"
+                >
+                  <span
+                    class="w-2.5 h-2.5 rounded-full bg-blue-600 opacity-0 transition-opacity"
+                  ></span>
+                </span>
+                <span>C) CD-ROM</span>
+              </label>
+              <label
+                class="option-button-label flex items-center w-full p-3 rounded-lg border-2 border-gray-300 text-left bg-white text-gray-700 hover:bg-gray-100 cursor-pointer"
+              >
+                <input
+                  type="radio"
+                  name="c4_mcq_8"
+                  value="D"
+                  class="sr-only"
+                  data-option-text="D) NAS"
+                />
+                <span
+                  class="custom-radio w-5 h-5 border-2 border-gray-400 rounded-full mr-3 grid place-items-center flex-shrink-0"
+                >
+                  <span
+                    class="w-2.5 h-2.5 rounded-full bg-blue-600 opacity-0 transition-opacity"
+                  ></span>
+                </span>
+                <span>D) NAS</span>
+              </label>
+            </div>
+          </div>
+
+          <div
+            class="space-y-3"
+            id="q-c4_mcq_9"
+            data-question-text="9. A card that stores data on a thin microprocessor embedded in it is a:"
+          >
+            <p class="text-lg font-medium text-gray-900">
+              9. A card that stores data on a thin microprocessor embedded in it
+              is a:
+            </p>
+            <div class="space-y-2" data-group="c4_mcq_9">
+              <label
+                class="option-button-label flex items-center w-full p-3 rounded-lg border-2 border-gray-300 text-left bg-white text-gray-700 hover:bg-gray-100 cursor-pointer"
+              >
+                <input
+                  type="radio"
+                  name="c4_mcq_9"
+                  value="A"
+                  class="sr-only"
+                  data-option-text="A) Magnetic stripe card"
+                />
+                <span
+                  class="custom-radio w-5 h-5 border-2 border-gray-400 rounded-full mr-3 grid place-items-center flex-shrink-0"
+                >
+                  <span
+                    class="w-2.5 h-2.5 rounded-full bg-blue-600 opacity-0 transition-opacity"
+                  ></span>
+                </span>
+                <span>A) Magnetic stripe card</span>
+              </label>
+              <label
+                class="option-button-label flex items-center w-full p-3 rounded-lg border-2 border-gray-300 text-left bg-white text-gray-700 hover:bg-gray-100 cursor-pointer"
+              >
+                <input
+                  type="radio"
+                  name="c4_mcq_9"
+                  value="B"
+                  class="sr-only"
+                  data-option-text="B) Memory card"
+                />
+                <span
+                  class="custom-radio w-5 h-5 border-2 border-gray-400 rounded-full mr-3 grid place-items-center flex-shrink-0"
+                >
+                  <span
+                    class="w-2.5 h-2.5 rounded-full bg-blue-600 opacity-0 transition-opacity"
+                  ></span>
+                </span>
+                <span>B) Memory card</span>
+              </label>
+              <label
+                class="option-button-label flex items-center w-full p-3 rounded-lg border-2 border-gray-300 text-left bg-white text-gray-700 hover:bg-gray-100 cursor-pointer"
+              >
+                <input
+                  type="radio"
+                  name="c4_mcq_9"
+                  value="C"
+                  class="sr-only"
+                  data-option-text="C) Smart card"
+                />
+                <span
+                  class="custom-radio w-5 h-5 border-2 border-gray-400 rounded-full mr-3 grid place-items-center flex-shrink-0"
+                >
+                  <span
+                    class="w-2.5 h-2.5 rounded-full bg-blue-600 opacity-0 transition-opacity"
+                  ></span>
+                </span>
+                <span>C) Smart card</span>
+              </label>
+              <label
+                class="option-button-label flex items-center w-full p-3 rounded-lg border-2 border-gray-300 text-left bg-white text-gray-700 hover:bg-gray-100 cursor-pointer"
+              >
+                <input
+                  type="radio"
+                  name="c4_mcq_9"
+                  value="D"
+                  class="sr-only"
+                  data-option-text="D) ExpressCard module"
+                />
+                <span
+                  class="custom-radio w-5 h-5 border-2 border-gray-400 rounded-full mr-3 grid place-items-center flex-shrink-0"
+                >
+                  <span
+                    class="w-2.5 h-2.5 rounded-full bg-blue-600 opacity-0 transition-opacity"
+                  ></span>
+                </span>
+                <span>D) ExpressCard module</span>
+              </label>
+            </div>
+          </div>
+
+          <div
+            class="space-y-3"
+            id="q-c4_mcq_10"
+            data-question-text="10. In the data hierarchy, what is a combination of one or more related characters?"
+          >
+            <p class="text-lg font-medium text-gray-900">
+              10. In the data hierarchy, what is a combination of one or more
+              related characters?
+            </p>
+            <div class="space-y-2" data-group="c4_mcq_10">
+              <label
+                class="option-button-label flex items-center w-full p-3 rounded-lg border-2 border-gray-300 text-left bg-white text-gray-700 hover:bg-gray-100 cursor-pointer"
+              >
+                <input
+                  type="radio"
+                  name="c4_mcq_10"
+                  value="A"
+                  class="sr-only"
+                  data-option-text="A) A File"
+                />
+                <span
+                  class="custom-radio w-5 h-5 border-2 border-gray-400 rounded-full mr-3 grid place-items-center flex-shrink-0"
+                >
+                  <span
+                    class="w-2.5 h-2.5 rounded-full bg-blue-600 opacity-0 transition-opacity"
+                  ></span>
+                </span>
+                <span>A) A File</span>
+              </label>
+              <label
+                class="option-button-label flex items-center w-full p-3 rounded-lg border-2 border-gray-300 text-left bg-white text-gray-700 hover:bg-gray-100 cursor-pointer"
+              >
+                <input
+                  type="radio"
+                  name="c4_mcq_10"
+                  value="B"
+                  class="sr-only"
+                  data-option-text="B) A Record"
+                />
+                <span
+                  class="custom-radio w-5 h-5 border-2 border-gray-400 rounded-full mr-3 grid place-items-center flex-shrink-0"
+                >
+                  <span
+                    class="w-2.5 h-2.5 rounded-full bg-blue-600 opacity-0 transition-opacity"
+                  ></span>
+                </span>
+                <span>B) A Record</span>
+              </label>
+              <label
+                class="option-button-label flex items-center w-full p-3 rounded-lg border-2 border-gray-300 text-left bg-white text-gray-700 hover:bg-gray-100 cursor-pointer"
+              >
+                <input
+                  type="radio"
+                  name="c4_mcq_10"
+                  value="C"
+                  class="sr-only"
+                  data-option-text="C) A Field"
+                />
+                <span
+                  class="custom-radio w-5 h-5 border-2 border-gray-400 rounded-full mr-3 grid place-items-center flex-shrink-0"
+                >
+                  <span
+                    class="w-2.5 h-2.5 rounded-full bg-blue-600 opacity-0 transition-opacity"
+                  ></span>
+                </span>
+                <span>C) A Field</span>
+              </label>
+              <label
+                class="option-button-label flex items-center w-full p-3 rounded-lg border-2 border-gray-300 text-left bg-white text-gray-700 hover:bg-gray-100 cursor-pointer"
+              >
+                <input
+                  type="radio"
+                  name="c4_mcq_10"
+                  value="D"
+                  class="sr-only"
+                  data-option-text="D) A Byte"
+                />
+                <span
+                  class="custom-radio w-5 h-5 border-2 border-gray-400 rounded-full mr-3 grid place-items-center flex-shrink-0"
+                >
+                  <span
+                    class="w-2.5 h-2.5 rounded-full bg-blue-600 opacity-0 transition-opacity"
+                  ></span>
+                </span>
+                <span>D) A Byte</span>
+              </label>
+            </div>
+          </div>
+
+          <h3 class="text-2xl font-semibold text-gray-800 pt-6">
+            Chapter 4 Quiz: True / False
+          </h3>
+
+          <div
+            class="space-y-3"
+            id="q-c4_tf_1"
+            data-question-text="1. True or False: 1024 Megabytes is equal to 1 Gigabyte."
+          >
+            <p class="text-lg font-medium text-gray-900">
+              1. True or False: 1024 Megabytes is equal to 1 Gigabyte.
+            </p>
+            <div class="flex gap-4" data-group="c4_tf_1">
+              <label
+                class="option-button-label flex items-center w-full p-3 rounded-lg border-2 border-gray-300 text-left bg-white text-gray-700 hover:bg-gray-100 cursor-pointer"
+              >
+                <input
+                  type="radio"
+                  name="c4_tf_1"
+                  value="T"
+                  class="sr-only"
+                  data-option-text="True"
+                />
+                <span
+                  class="custom-radio w-5 h-5 border-2 border-gray-400 rounded-full mr-3 grid place-items-center flex-shrink-0"
+                >
+                  <span
+                    class="w-2.5 h-2.5 rounded-full bg-blue-600 opacity-0 transition-opacity"
+                  ></span>
+                </span>
+                <span>True</span>
+              </label>
+              <label
+                class="option-button-label flex items-center w-full p-3 rounded-lg border-2 border-gray-300 text-left bg-white text-gray-700 hover:bg-gray-100 cursor-pointer"
+              >
+                <input
+                  type="radio"
+                  name="c4_tf_1"
+                  value="F"
+                  class="sr-only"
+                  data-option-text="False"
+                />
+                <span
+                  class="custom-radio w-5 h-5 border-2 border-gray-400 rounded-full mr-3 grid place-items-center flex-shrink-0"
+                >
+                  <span
+                    class="w-2.5 h-2.5 rounded-full bg-blue-600 opacity-0 transition-opacity"
+                  ></span>
+                </span>
+                <span>False</span>
+              </label>
+            </div>
+          </div>
+
+          <div
+            class="space-y-3"
+            id="q-c4_tf_2"
+            data-question-text="2. True or False: Solid State Drives (SSDs) generally have slower access times than magnetic hard disks."
+          >
+            <p class="text-lg font-medium text-gray-900">
+              2. True or False: Solid State Drives (SSDs) generally have slower
+              access times than magnetic hard disks.
+            </p>
+            <div class="flex gap-4" data-group="c4_tf_2">
+              <label
+                class="option-button-label flex items-center w-full p-3 rounded-lg border-2 border-gray-300 text-left bg-white text-gray-700 hover:bg-gray-100 cursor-pointer"
+              >
+                <input
+                  type="radio"
+                  name="c4_tf_2"
+                  value="T"
+                  class="sr-only"
+                  data-option-text="True"
+                />
+                <span
+                  class="custom-radio w-5 h-5 border-2 border-gray-400 rounded-full mr-3 grid place-items-center flex-shrink-0"
+                >
+                  <span
+                    class="w-2.5 h-2.5 rounded-full bg-blue-600 opacity-0 transition-opacity"
+                  ></span>
+                </span>
+                <span>True</span>
+              </label>
+              <label
+                class="option-button-label flex items-center w-full p-3 rounded-lg border-2 border-gray-300 text-left bg-white text-gray-700 hover:bg-gray-100 cursor-pointer"
+              >
+                <input
+                  type="radio"
+                  name="c4_tf_2"
+                  value="F"
+                  class="sr-only"
+                  data-option-text="False"
+                />
+                <span
+                  class="custom-radio w-5 h-5 border-2 border-gray-400 rounded-full mr-3 grid place-items-center flex-shrink-0"
+                >
+                  <span
+                    class="w-2.5 h-2.5 rounded-full bg-blue-600 opacity-0 transition-opacity"
+                  ></span>
+                </span>
+                <span>False</span>
+              </label>
+            </div>
+          </div>
+
+          <div
+            class="space-y-3"
+            id="q-c4_tf_3"
+            data-question-text="3. True or False: A CD-ROM can be read from and written to multiple times."
+          >
+            <p class="text-lg font-medium text-gray-900">
+              3. True or False: A CD-ROM can be read from and written to
+              multiple times.
+            </p>
+            <div class="flex gap-4" data-group="c4_tf_3">
+              <label
+                class="option-button-label flex items-center w-full p-3 rounded-lg border-2 border-gray-300 text-left bg-white text-gray-700 hover:bg-gray-100 cursor-pointer"
+              >
+                <input
+                  type="radio"
+                  name="c4_tf_3"
+                  value="T"
+                  class="sr-only"
+                  data-option-text="True"
+                />
+                <span
+                  class="custom-radio w-5 h-5 border-2 border-gray-400 rounded-full mr-3 grid place-items-center flex-shrink-0"
+                >
+                  <span
+                    class="w-2.5 h-2.5 rounded-full bg-blue-600 opacity-0 transition-opacity"
+                  ></span>
+                </span>
+                <span>True</span>
+              </label>
+              <label
+                class="option-button-label flex items-center w-full p-3 rounded-lg border-2 border-gray-300 text-left bg-white text-gray-700 hover:bg-gray-100 cursor-pointer"
+              >
+                <input
+                  type="radio"
+                  name="c4_tf_3"
+                  value="F"
+                  class="sr-only"
+                  data-option-text="False"
+                />
+                <span
+                  class="custom-radio w-5 h-5 border-2 border-gray-400 rounded-full mr-3 grid place-items-center flex-shrink-0"
+                >
+                  <span
+                    class="w-2.5 h-2.5 rounded-full bg-blue-600 opacity-0 transition-opacity"
+                  ></span>
+                </span>
+                <span>False</span>
+              </label>
+            </div>
+          </div>
+
+          <div
+            class="space-y-3"
+            id="q-c4_tf_4"
+            data-question-text="4. True or False: A smart card stores data on a thin microprocessor."
+          >
+            <p class="text-lg font-medium text-gray-900">
+              4. True or False: A smart card stores data on a thin
+              microprocessor.
+            </p>
+            <div class="flex gap-4" data-group="c4_tf_4">
+              <label
+                class="option-button-label flex items-center w-full p-3 rounded-lg border-2 border-gray-300 text-left bg-white text-gray-700 hover:bg-gray-100 cursor-pointer"
+              >
+                <input
+                  type="radio"
+                  name="c4_tf_4"
+                  value="T"
+                  class="sr-only"
+                  data-option-text="True"
+                />
+                <span
+                  class="custom-radio w-5 h-5 border-2 border-gray-400 rounded-full mr-3 grid place-items-center flex-shrink-0"
+                >
+                  <span
+                    class="w-2.5 h-2.5 rounded-full bg-blue-600 opacity-0 transition-opacity"
+                  ></span>
+                </span>
+                <span>True</span>
+              </label>
+              <label
+                class="option-button-label flex items-center w-full p-3 rounded-lg border-2 border-gray-300 text-left bg-white text-gray-700 hover:bg-gray-100 cursor-pointer"
+              >
+                <input
+                  type="radio"
+                  name="c4_tf_4"
+                  value="F"
+                  class="sr-only"
+                  data-option-text="False"
+                />
+                <span
+                  class="custom-radio w-5 h-5 border-2 border-gray-400 rounded-full mr-3 grid place-items-center flex-shrink-0"
+                >
+                  <span
+                    class="w-2.5 h-2.5 rounded-full bg-blue-600 opacity-0 transition-opacity"
+                  ></span>
+                </span>
+                <span>False</span>
+              </label>
+            </div>
+          </div>
+
+          <div
+            class="space-y-3"
+            id="q-c4_tf_5"
+            data-question-text="5. True or False: A 'field' is a collection of related records."
+          >
+            <p class="text-lg font-medium text-gray-900">
+              5. True or False: A "field" is a collection of related records.
+            </p>
+            <div class="flex gap-4" data-group="c4_tf_5">
+              <label
+                class="option-button-label flex items-center w-full p-3 rounded-lg border-2 border-gray-300 text-left bg-white text-gray-700 hover:bg-gray-100 cursor-pointer"
+              >
+                <input
+                  type="radio"
+                  name="c4_tf_5"
+                  value="T"
+                  class="sr-only"
+                  data-option-text="True"
+                />
+                <span
+                  class="custom-radio w-5 h-5 border-2 border-gray-400 rounded-full mr-3 grid place-items-center flex-shrink-0"
+                >
+                  <span
+                    class="w-2.5 h-2.5 rounded-full bg-blue-600 opacity-0 transition-opacity"
+                  ></span>
+                </span>
+                <span>True</span>
+              </label>
+              <label
+                class="option-button-label flex items-center w-full p-3 rounded-lg border-2 border-gray-300 text-left bg-white text-gray-700 hover:bg-gray-100 cursor-pointer"
+              >
+                <input
+                  type="radio"
+                  name="c4_tf_5"
+                  value="F"
+                  class="sr-only"
+                  data-option-text="False"
+                />
+                <span
+                  class="custom-radio w-5 h-5 border-2 border-gray-400 rounded-full mr-3 grid place-items-center flex-shrink-0"
+                >
+                  <span
+                    class="w-2.5 h-2.5 rounded-full bg-blue-600 opacity-0 transition-opacity"
+                  ></span>
+                </span>
+                <span>False</span>
+              </label>
+            </div>
+          </div>
+
+          <div
+            class="space-y-3"
+            id="q-c4_tf_6"
+            data-question-text="6. True or False: 1024 Bytes is equal to 1 Megabyte."
+          >
+            <p class="text-lg font-medium text-gray-900">
+              6. True or False: 1024 Bytes is equal to 1 Megabyte.
+            </p>
+            <div class="flex gap-4" data-group="c4_tf_6">
+              <label
+                class="option-button-label flex items-center w-full p-3 rounded-lg border-2 border-gray-300 text-left bg-white text-gray-700 hover:bg-gray-100 cursor-pointer"
+              >
+                <input
+                  type="radio"
+                  name="c4_tf_6"
+                  value="T"
+                  class="sr-only"
+                  data-option-text="True"
+                />
+                <span
+                  class="custom-radio w-5 h-5 border-2 border-gray-400 rounded-full mr-3 grid place-items-center flex-shrink-0"
+                >
+                  <span
+                    class="w-2.5 h-2.5 rounded-full bg-blue-600 opacity-0 transition-opacity"
+                  ></span>
+                </span>
+                <span>True</span>
+              </label>
+              <label
+                class="option-button-label flex items-center w-full p-3 rounded-lg border-2 border-gray-300 text-left bg-white text-gray-700 hover:bg-gray-100 cursor-pointer"
+              >
+                <input
+                  type="radio"
+                  name="c4_tf_6"
+                  value="F"
+                  class="sr-only"
+                  data-option-text="False"
+                />
+                <span
+                  class="custom-radio w-5 h-5 border-2 border-gray-400 rounded-full mr-3 grid place-items-center flex-shrink-0"
+                >
+                  <span
+                    class="w-2.5 h-2.5 rounded-full bg-blue-600 opacity-0 transition-opacity"
+                  ></span>
+                </span>
+                <span>False</span>
+              </label>
+            </div>
+          </div>
+
+          <div
+            class="space-y-3"
+            id="q-c4_tf_7"
+            data-question-text="7. True or False: 'Access time' measures how long it takes to locate an item on a storage medium."
+          >
+            <p class="text-lg font-medium text-gray-900">
+              7. True or False: "Access time" measures how long it takes to
+              locate an item on a storage medium.
+            </p>
+            <div class="flex gap-4" data-group="c4_tf_7">
+              <label
+                class="option-button-label flex items-center w-full p-3 rounded-lg border-2 border-gray-300 text-left bg-white text-gray-700 hover:bg-gray-100 cursor-pointer"
+              >
+                <input
+                  type="radio"
+                  name="c4_tf_7"
+                  value="T"
+                  class="sr-only"
+                  data-option-text="True"
+                />
+                <span
+                  class="custom-radio w-5 h-5 border-2 border-gray-400 rounded-full mr-3 grid place-items-center flex-shrink-0"
+                >
+                  <span
+                    class="w-2.5 h-2.5 rounded-full bg-blue-600 opacity-0 transition-opacity"
+                  ></span>
+                </span>
+                <span>True</span>
+              </label>
+              <label
+                class="option-button-label flex items-center w-full p-3 rounded-lg border-2 border-gray-300 text-left bg-white text-gray-700 hover:bg-gray-100 cursor-pointer"
+              >
+                <input
+                  type="radio"
+                  name="c4_tf_7"
+                  value="F"
+                  class="sr-only"
+                  data-option-text="False"
+                />
+                <span
+                  class="custom-radio w-5 h-5 border-2 border-gray-400 rounded-full mr-3 grid place-items-center flex-shrink-0"
+                >
+                  <span
+                    class="w-2.5 h-2.5 rounded-full bg-blue-600 opacity-0 transition-opacity"
+                  ></span>
+                </span>
+                <span>False</span>
+              </label>
+            </div>
+          </div>
+
+          <div
+            class="space-y-3"
+            id="q-c4_tf_8"
+            data-question-text="8. True or False: A hard disk contains flexible, circular platters."
+          >
+            <p class="text-lg font-medium text-gray-900">
+              8. True or False: A hard disk contains flexible, circular
+              platters.
+            </p>
+            <div class="flex gap-4" data-group="c4_tf_8">
+              <label
+                class="option-button-label flex items-center w-full p-3 rounded-lg border-2 border-gray-300 text-left bg-white text-gray-700 hover:bg-gray-100 cursor-pointer"
+              >
+                <input
+                  type="radio"
+                  name="c4_tf_8"
+                  value="T"
+                  class="sr-only"
+                  data-option-text="True"
+                />
+                <span
+                  class="custom-radio w-5 h-5 border-2 border-gray-400 rounded-full mr-3 grid place-items-center flex-shrink-0"
+                >
+                  <span
+                    class="w-2.5 h-2.5 rounded-full bg-blue-600 opacity-0 transition-opacity"
+                  ></span>
+                </span>
+                <span>True</span>
+              </label>
+              <label
+                class="option-button-label flex items-center w-full p-3 rounded-lg border-2 border-gray-300 text-left bg-white text-gray-700 hover:bg-gray-100 cursor-pointer"
+              >
+                <input
+                  type="radio"
+                  name="c4_tf_8"
+                  value="F"
+                  class="sr-only"
+                  data-option-text="False"
+                />
+                <span
+                  class="custom-radio w-5 h-5 border-2 border-gray-400 rounded-full mr-3 grid place-items-center flex-shrink-0"
+                >
+                  <span
+                    class="w-2.5 h-2.5 rounded-full bg-blue-600 opacity-0 transition-opacity"
+                  ></span>
+                </span>
+                <span>False</span>
+              </label>
+            </div>
+          </div>
+
+          <div
+            class="space-y-3"
+            id="q-c4_tf_9"
+            data-question-text="9. True or False: A CD-R is an erasable multisession disc."
+          >
+            <p class="text-lg font-medium text-gray-900">
+              9. True or False: A CD-R is an erasable multisession disc.
+            </p>
+            <div class="flex gap-4" data-group="c4_tf_9">
+              <label
+                class="option-button-label flex items-center w-full p-3 rounded-lg border-2 border-gray-300 text-left bg-white text-gray-700 hover:bg-gray-100 cursor-pointer"
+              >
+                <input
+                  type="radio"
+                  name="c4_tf_9"
+                  value="T"
+                  class="sr-only"
+                  data-option-text="True"
+                />
+                <span
+                  class="custom-radio w-5 h-5 border-2 border-gray-400 rounded-full mr-3 grid place-items-center flex-shrink-0"
+                >
+                  <span
+                    class="w-2.5 h-2.5 rounded-full bg-blue-600 opacity-0 transition-opacity"
+                  ></span>
+                </span>
+                <span>True</span>
+              </label>
+              <label
+                class="option-button-label flex items-center w-full p-3 rounded-lg border-2 border-gray-300 text-left bg-white text-gray-700 hover:bg-gray-100 cursor-pointer"
+              >
+                <input
+                  type="radio"
+                  name="c4_tf_9"
+                  value="F"
+                  class="sr-only"
+                  data-option-text="False"
+                />
+                <span
+                  class="custom-radio w-5 h-5 border-2 border-gray-400 rounded-full mr-3 grid place-items-center flex-shrink-0"
+                >
+                  <span
+                    class="w-2.5 h-2.5 rounded-full bg-blue-600 opacity-0 transition-opacity"
+                  ></span>
+                </span>
+                <span>False</span>
+              </label>
+            </div>
+          </div>
+
+          <div
+            class="space-y-3"
+            id="q-c4_tf_10"
+            data-question-text="10. True or False: A primary key uniquely identifies each record."
+          >
+            <p class="text-lg font-medium text-gray-900">
+              10. True or False: A primary key uniquely identifies each record.
+            </p>
+            <div class="flex gap-4" data-group="c4_tf_10">
+              <label
+                class="option-button-label flex items-center w-full p-3 rounded-lg border-2 border-gray-300 text-left bg-white text-gray-700 hover:bg-gray-100 cursor-pointer"
+              >
+                <input
+                  type="radio"
+                  name="c4_tf_10"
+                  value="T"
+                  class="sr-only"
+                  data-option-text="True"
+                />
+                <span
+                  class="custom-radio w-5 h-5 border-2 border-gray-400 rounded-full mr-3 grid place-items-center flex-shrink-0"
+                >
+                  <span
+                    class="w-2.5 h-2.5 rounded-full bg-blue-600 opacity-0 transition-opacity"
+                  ></span>
+                </span>
+                <span>True</span>
+              </label>
+              <label
+                class="option-button-label flex items-center w-full p-3 rounded-lg border-2 border-gray-300 text-left bg-white text-gray-700 hover:bg-gray-100 cursor-pointer"
+              >
+                <input
+                  type="radio"
+                  name="c4_tf_10"
+                  value="F"
+                  class="sr-only"
+                  data-option-text="False"
+                />
+                <span
+                  class="custom-radio w-5 h-5 border-2 border-gray-400 rounded-full mr-3 grid place-items-center flex-shrink-0"
+                >
+                  <span
+                    class="w-2.5 h-2.5 rounded-full bg-blue-600 opacity-0 transition-opacity"
+                  ></span>
+                </span>
+                <span>False</span>
+              </label>
+            </div>
+          </div>
+        </section>
+
+        <div class="pt-8 border-t border-gray-200">
+          <button
+            type="button"
+            id="submitBtn"
+            class="w-full bg-blue-600 text-white font-bold py-4 px-6 rounded-lg shadow-lg hover:bg-blue-700 focus:outline-none focus:ring-4 focus:ring-blue-300 transition duration-300 ease-in-out text-lg"
+          >
+            Check My Answers
+          </button>
+        </div>
+      </form>
+
+      <div
+        id="resultsContainer"
+        class="bg-white p-6 sm:p-8 rounded-2xl shadow-lg space-y-8 hidden"
+      >
+        <div class="text-center">
+          <h2 class="text-3xl font-bold text-gray-900 mb-2">Quiz Results</h2>
+          <div id="score" class="text-5xl font-extrabold text-blue-600"></div>
+          <div id="scoreText" class="text-lg text-gray-600 font-medium"></div>
+        </div>
+
+        <div class="space-y-6">
+          <h3
+            class="text-2xl font-semibold text-gray-800 border-b-2 border-gray-200 pb-3"
+          >
+            Answer Review
+          </h3>
+          <div id="answerReviewList" class="space-y-4"></div>
+        </div>
+
+        <div class="pt-6 border-t border-gray-200">
+          <button
+            type="button"
+            id="resetBtn"
+            class="w-full bg-gray-600 text-white font-bold py-4 px-6 rounded-lg shadow-lg hover:bg-gray-700 focus:outline-none focus:ring-4 focus:ring-gray-300 transition duration-300 ease-in-out text-lg"
+          >
+            Try Again
+          </button>
+        </div>
+      </div>
+    </div>
+
+    <footer class="text-center mt-12 mb-8 text-gray-500 text-sm">
+      <p>&copy; 2025 Mostafa Gamal (EM1707). All rights reserved.</p>
+    </footer>
+
+    <script>
+        // Define correct answers and their full text for review
+        const correctAnswers = {
+            // Chapter 3
+            'c3_mcq_1': { 'value': 'B', 'text': 'B) Motherboard' },
+            'c3_mcq_2': { 'value': 'C', 'text': 'C) Control Unit' },
+            'c3_mcq_3': { 'value': 'A', 'text': 'A) ALU' },
+            'c3_mcq_4': { 'value': 'C', 'text': 'C) Gigahertz (GHz)' },
+            'c3_mcq_5': { 'value': 'B', 'text': 'B) 8' },
+            'c3_mcq_6': { 'value': 'C', 'text': 'C) Registers' },
+            'c3_mcq_7': { 'value': 'B', 'text': 'B) System Clock' },
+            'c3_mcq_8': { 'value': 'D', 'text': 'D) 2' },
+            'c3_mcq_9': { 'value': 'B', 'text': 'B) Mouse' },
+            'c3_mcq_10': { 'value': 'B', 'text': 'B) Parallel processing' },
+            'c3_tf_1': { 'value': 'T', 'text': 'True' },
+            'c3_tf_2': { 'value': 'F', 'text': 'False' },
+            'c3_tf_3': { 'value': 'T', 'text': 'True' },
+            'c3_tf_4': { 'value': 'F', 'text': 'False' },
+            'c3_tf_5': { 'value': 'F', 'text': 'False' },
+            'c3_tf_6': { 'value': 'T', 'text': 'True' },
+            'c3_tf_7': { 'value': 'F', 'text': 'False' },
+            'c3_tf_8': { 'value': 'F', 'text': 'False' },
+            'c3_tf_9': { 'value': 'F', 'text': 'False' },
+            'c3_tf_10': { 'value': 'T', 'text': 'True' },
+            // Chapter 4
+            'c4_mcq_1': { 'value': 'B', 'text': 'B) Reading' },
+            'c4_mcq_2': { 'value': 'C', 'text': 'C) Flash Memory' },
+            'c4_mcq_3': { 'value': 'C', 'text': 'C) Cloud Storage' },
+            'c4_mcq_4': { 'value': 'D', 'text': 'D) CD-RW' },
+            'c4_mcq_5': { 'value': 'B', 'text': 'B) A Record' },
+            'c4_mcq_6': { 'value': 'C', 'text': 'C) RAID' },
+            'c4_mcq_7': { 'value': 'C', 'text': 'C) Faster access time' },
+      'c4_mcq_8': { 'value': 'A', 'text': 'A) Memory card' },
+            'c4_mcq_9': { 'value': 'C', 'text': 'C) Smart card' },
+            'c4_mcq_10': { 'value': 'C', 'text': 'C) A Field' },
+            'c4_tf_1': { 'value': 'T', 'text': 'True' },
+            'c4_tf_2': { 'value': 'F', 'text': 'False' },
+            'c4_tf_3': { 'value':'F', 'text': 'False' },
+            'c4_tf_4': { 'value': 'T', 'text': 'True' },
+            'c4_tf_5': { 'value': 'F', 'text': 'False' },
+            'c4_tf_6': { 'value': 'F', 'text': 'False' },
+            'c4_tf_7': { 'value': 'T', 'text': 'True' },
+            'c4_tf_8': { 'value': 'F', 'text': 'False' },
+            'c4_tf_9': { 'value': 'F', 'text': 'False' },
+            'c4_tf_10': { 'value': 'T', 'text': 'True' },
+        };
+
+        const questionIDs = Object.keys(correctAnswers);
+        const totalQuestions = questionIDs.length;
+
+        // Get DOM elements
+        const quizForm = document.getElementById('quizForm');
+        const submitBtn = document.getElementById('submitBtn');
+        const resultsContainer = document.getElementById('resultsContainer');
+        const answerReviewList = document.getElementById('answerReviewList');
+        const resetBtn = document.getElementById('resetBtn');
+        const scoreEl = document.getElementById('score');
+        const scoreTextEl = document.getElementById('scoreText');
+
+        // --- Event Listener for Option Clicks ---
+        quizForm.addEventListener('click', (e) => {
+            const label = e.target.closest('.option-button-label');
+            if (!label) return; // Exit if it wasn't an option label
+
+            // Prevent changing answers after submission
+            if (quizForm.dataset.submitted === 'true') {
+                e.preventDefault();
+                return;
+            }
+
+            const radio = label.querySelector('input[type="radio"]');
+            if (radio) {
+                // Manually check the radio button
+                radio.checked = true;
+
+                // Find all labels in this group and remove the selection class
+                const groupName = radio.name;
+                const allLabelsInGroup = document.querySelectorAll(`input[name="${groupName}"]`);
+                allLabelsInGroup.forEach(r => {
+                    r.closest('.option-button-label').classList.remove('selected-option-label');
+                });
+
+                // Add selection class to the clicked label
+                label.classList.add('selected-option-label');
+            }
+        });
+
+        // --- Event Listener for Submit Button ---
+        submitBtn.addEventListener('click', () => {
+            let score = 0;
+            const formData = new FormData(quizForm);
+            quizForm.dataset.submitted = 'true'; // Mark quiz as submitted
+            let reviewHtml = ''; // To build the answer review list
+
+            // Loop through each question to check answers
+            questionIDs.forEach(qId => {
+                const userAnswerValue = formData.get(qId);
+                const correctAnswer = correctAnswers[qId];
+                const questionDiv = document.getElementById(`q-${qId}`);
+                const questionText = questionDiv.dataset.questionText;
+
+                let userAnswerText = "You did not answer this question.";
+                let isUserCorrect = false;
+
+                // Find all radio buttons for this question
+                const optionRadios = document.querySelectorAll(`input[name="${qId}"]`);
+
+                optionRadios.forEach(radio => {
+                    const label = radio.closest('.option-button-label');
+                    const labelValue = radio.value;
+                    const isCorrect = (labelValue === correctAnswer.value);
+                    const isSelected = radio.checked;
+
+                    // Clear any previous selection styles
+                    label.classList.remove('selected-option-label');
+
+                    if (isCorrect) {
+                        label.classList.add('correct-answer-style');
+                    }
+
+                    if (isSelected) {
+                        userAnswerText = radio.dataset.optionText; // Get text from data attribute
+                        if (!isCorrect) {
+                            label.classList.add('incorrect-answer-style');
+                        } else {
+                            isUserCorrect = true;
+                            score++;
+                        }
+                    }
+                });
+
+                // --- Build the Answer Review HTML ---
+                let questionClass = isUserCorrect ? 'results-question-correct' : 'results-question-incorrect';
+
+                reviewHtml += `
+                    <div class="rounded-lg overflow-hidden shadow-sm border border-gray-200">
+                        <p class="p-3 border-l-4 ${questionClass} font-medium text-gray-800">${questionText}</p>
+                        <div class="p-3 results-answer-review space-y-1">
+                `;
+
+                if (userAnswerValue) {
+                     reviewHtml += `<p class="text-sm text-gray-700">Your answer: <span class="font-medium ${isUserCorrect ? 'text-green-700' : 'text-red-700'}">${userAnswerText}</span></p>`;
+                } else {
+                    reviewHtml += `<p class="text-sm font-medium text-red-700">You did not answer this question.</p>`;
+                }
+
+                if (!isUserCorrect) {
+                    reviewHtml += `<p class="text-sm text-gray-700">Correct answer: <span class="font-medium text-green-700">${correctAnswer.text}</span></p>`;
+                }
+
+                reviewHtml += `
+                        </div>
+                    </div>
+                `;
+            });
+
+
+            // Display score in results page
+            scoreEl.textContent = `${score} / ${totalQuestions}`;
+            let scoreMessage = "Good job! Keep reviewing.";
+            if (score === totalQuestions) {
+                scoreMessage = "Perfect score! You're an expert!";
+            } else if (score < 35) { // Updated this to match the new joke
+                scoreMessage = "You have the same IQ as a monkey :). Review the summaries and try again.";
+            } else if (score < totalQuestions * 0.9) {
+                scoreMessage = "Good score! Review your answers to learn more.";
+            }
+            scoreTextEl.textContent = scoreMessage;
+
+            // Inject the review HTML
+            answerReviewList.innerHTML = reviewHtml;
+
+            // Hide quiz form, show results
+            quizForm.classList.add('hidden');
+            resultsContainer.classList.remove('hidden');
+
+            // Scroll to the top of the viewport to see results
+            window.scrollTo({ top: 0, behavior: 'smooth' });
+        });
+
+        // --- Function to Reset Quiz ---
+        function resetQuiz() {
+            quizForm.dataset.submitted = 'false'; // Unmark quiz
+
+            // Uncheck all radio buttons
+            const allRadios = quizForm.querySelectorAll('input[type="radio"]');
+            allRadios.forEach(radio => {
+                radio.checked = false;
+            });
+
+            // Clear all button styles
+            const allLabels = quizForm.querySelectorAll('.option-button-label');
+            allLabels.forEach(label => {
+                label.classList.remove('selected-option-label', 'correct-answer-style', 'incorrect-answer-style');
+            });
+
+            // Hide results, show quiz
+            resultsContainer.classList.add('hidden');
+            quizForm.classList.remove('hidden');
+
+            // Clear the dynamically generated review list
+            answerReviewList.innerHTML = '';
+
+            // Scroll to top
+            window.scrollTo({ top: 0, behavior: 'smooth' });
+        }
+
+        // --- Event Listener for Reset Button ---
+        resetBtn.addEventListener('click', resetQuiz);
+    </script>
+  </body>
+</html>
